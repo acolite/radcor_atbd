@@ -1,0 +1,97 @@
+\chapter{Radiative transfer simulations} \label{ap:apsfs}
+
+This Chapter will provide information on the radiative transfer simulations used to build the look-up-table (LUT) for the point spread function (PSF) and spatially-resolved spherical albedo (SAF) kernels, models used to fit and reconstruct the simulations, and how the kernels are scaled and combined inside ACOLITE to represent the gradient of Rayleigh and aerosol relative contributions to the upward diffuse transmittance and spherical albedo of the atmosphere.
+
+\section{Transmittance and reflectance kernels in ACOLITE}
+
+In order to implement TSDSF and RAdCor proper, it is necessary to simulate the spatial functions quantifying the contributions of each surface element to the signal over the target pixel. The discrete form of those spatial functions, quantifying integrals over the pixel area, are odd sized matrices, resulting in a centre pixel. In the spatial domain, the convolution is carried out by positioning the centre pixel of the kernel over the target pixel and calculating the Frobenius inner product of both matrices. When the kernel is normalised such that its sum (in the discrete case) is 1, the result is a weighted average of the spatial reflectance function (image), with the weights given by the kernel. The kernel might not be normalized, and in that case the Frobenius inner product scales the average reflectance by the magnitude of the process (\textit{e.g.}, upward diffuse transmittance).
+
+Calculating the kernels requires radiative transfer simulations, requiring additional computational resources and time for each run of the processor. The general approach to circumvent this requirement is to perform simulations ahead of time to build a LUT, requiring more storage and disk access operations, but typically significantly reducing the processing time during application. Values for specific conditions are then interpolated from the LUT grid. The combinations of different surface pressures for Rayleigh optical thickness ($\tau_\text{ray}$), different concentration of aerosols for the aerosol optical thickness ($\tau_\text{aer}$) of different aerosol models, and different view angles along the sensor swath could result in a large number of calculations. However, previous research showed that it is possible to greatly reduce those calculations.   
+
+\citet{Tanre1987} showed, for nadir viewing sensors, that the annular cumulative distribution of the PSF for an atmosphere containing only a given aerosol model (no Rayleigh scattering) has only a small dependency on $\tau_\text{aer}$. In addition, \citet{Reinersman1995} showed that PSF simulations for Rayleigh-only atmospheres and aerosol-only atmospheres could be combined by a weighted average to reproduce a Rayleigh + aerosol atmosphere, using as weights the fractional contribution of each scatter to the upward diffuse transmittance. \citet{Reinersman1995} also showed that the PSF for nadir view is a good approximation for PSFs considering view angles up to 20$^\circ$. Those results support that PSFs for near-nadir viewing sensors (up to 20$^\circ$ across the sensor swath) can be calculated for nadir view only and for pure scatter types (Rayleigh and aerosols), at a single optical thickness, and combined to provide the mix PSF at the required optical thickness during application. We applied the same principles for the SAF kernels.
+
+Differently from 6SV radiative transfer code \citep{Vermote1997}, in RAdCor we chose to calculate the kernels for each sensor waveband, to better account for the spectral varying scattering phase function and single scattering albedo of the aerosol models. This increases the number of computations and resulting kernels in the LUT, which can lead to large storage space if the kernels are stored as matrices. Therefore we chose to fit the simulations to appropriate models allowing to reconstruct the PSFs at the required spatial extent.
+
+The SAF over Lambertian surfaces will always result in radially symmetric kernel. The same radial symmetry will be observed for PSFs calculated for nadir viewing sensors over Lambertian surfaces. This radial symmetry allows the simulations to be performed in a annular geometry (Fig.~\ref{fig:annular_geom}A). For this geometry the Monte Carlo integral of the function (PSF or SAF) in each annuli is given by \citep{Tanre1981}:
+
+\begin{equation}
+g(r_i) = 2 \pi \int\limits_{r_i - \Delta r}^{r_i} d r \, f(r) \, r = 2 \pi \overbar{f(r) \, r} \, \Delta r,
+\label{eq:annular_accumulator}
+\end{equation} 
+
+\noindent where $r$ is the radius, $i$ is the index of the annuli, $f$ is the PSF or the SAF, $g$ is the discrete annular function, and the over bar represent the average radius-weighted kernel. The function $f(r)$ is not directly retrieved from Monte Carlo integration, but can be calculated from the derivative of the cumulative discrete annular function $g$, $G$:
+
+\begin{equation}
+f(r) = \frac{d G(r)}{2 \, \pi \, r \, d r}.
+\label{eq:annular_derivative}
+\end{equation}
+
+Since the cumulative distribution of the discrete annular function is also discrete:
+
+\begin{equation}
+G(r_i) = 2 \pi \int\limits_{0}^{r_i} \, d r \, f(r) \, r = \sum\limits_1^i 2 \pi \overbar{f(r) \, r} \, \Delta r,
+\label{eq:annular_cumulative}
+\end{equation} 
+
+\noindent a model is fitted to interpolate the curve (Fig.~\ref{fig:annular_geom}B). The model used in RAdCor is:
+
+\begin{equation}
+\openup 2\jot
+\begin{split}
+&G(r) = c_1^\prime - (c_2^\prime \exp{(c_3^\prime r)} + c_4^\prime \exp{(c_5^\prime r)} + c_6^\prime \exp{(c_7^\prime r})), \\
+&c_1^\prime = c_1 = 2\pi \int\limits_0^\infty d r \, f(r) \, r, \\
+&c_2^\prime = \frac{c_2}{P}, \\
+&c_3^\prime = \frac{c_3}{P}, \\
+&c_4^\prime = (c_1^\prime - c_2^\prime) c_4, \\
+&c_5^\prime = c_5, \\
+&c_6^\prime = (c_1^\prime - c_2^\prime) (1 - c_4), \\
+&c_7^\prime = c_6, \\
+&P = \frac{\text{pressure}}{1013.25},
+\end{split}
+\label{eq:annular_fit}
+\end{equation} 
+
+\noindent where $c_2$ to $c_6$ are five free parameters, with the constraint that $c_2^\prime + c_4^\prime + c_6^\prime = c_1$, and pressure is given in HPa. The pressure dependency in the model fit is used to accommodate variable surface pressure for Rayleigh scattering, with the surface pressure for aerosol only simulation always set to 1013.25 HPa (no pressure dependency in the fit). While other models are possible, this is the annular fit model and coefficients provided by the apsfs library to perform radiative transfers for RAdCor. The coefficients exported from the apsfs are those for the unit normalised simulation, that is, $c_1 = 1$. The retrieved density PSF is then used to calculate the discrete PSF with integration over the pixel area, producing a grid. 
+
+It should be noted that the implementation of the kernels in ACOLITE is not directly interfaced by the user and might be changed in future versions. The logic of using a model fit is in part justifiable if a single simulation will be used to represent different wavebands and sensor spatial resolutions, which is the approach in 6SV and was the initial approach in the prototype version of RAdCor. While this is possible for Rayleigh, the aerosol phase function and single scattering albedo do show spectral dependency and this simplified approach is not ideal, substituted in RAdCor for simulations at each sensor waveband. As the wavebands are unique per sensor, so are the spatial resolutions, and the generality provided by the model fit becomes less relevant. As disk access speed and storage increases, we will evaluate to store the discrete PSF directly, simulated in a grid accumulator geometry, with the grid resolution equal to that of the sensor waveband.
+
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[width=0.4\linewidth]{annular_geom.png}
+  \includegraphics[width=0.5\linewidth]{cumintegral_annular_fit_edu.png}
+  \caption{Properties of the annular accumulator geometry for Monte Carlo integrals. (A) A schematic representation of the annular accumulator geometry. (B) A schematic representation of discrete kernel, discrete cumulative distribution function, and model fit.}
+  \label{fig:annular_geom}
+\end{figure}
+
+Finally, the reconstructed integro-normalised discrete kernel in a grid resolution matching the waveband resolution is scaled when necessary for the magnitude of the process (upward diffuse transmittance for the PSF and spherical albedo for the SAF).
+
+\section{Radiative transfer simulations} 
+
+The radiative transfer simulations for the PSF and SAF kernels are performed in a Backward Monte Carlo radiative transfer code written to support RAdCor, the apsfs library (\url{https://github.com/eoplus/apsfs/}).
+
+Following the system definition in Chapter~\ref{ch:theory}, the Earth-atmosphere system is treated as plane-parallel instead of spherical, with the atmosphere divided in homogeneous layers stacked vertically. For simulations of the spatially resolved spherical albedo, the source (detector) is placed at the bottom of the atmosphere, emitting radiance with a cosine weighted directional function centred at the zenith and covering all directions in the upper hemisphere. For simulations of the atmospheric point spread function, the source (detector) is placed at the nominal height of the sensor, emitting radiance in an infinitesimal solid angle or isotropically within the solid angle defined by the field of view of the detector elements, centred on the viewing direction. The recorded value is the fraction of the emitted radiance received by each surface bin (integration area), that can be defined in an annular, sectorial or grid geometry model. 
+
+The composition and structure of the atmosphere is given by the US standard atmosphere model of 1976 \citep{NOAA1976} and the aerosol optical properties and height distribution are taken from the 6SV radiative transfer model. This was chosen as ACOLITE uses the 6SV aerosol models in its calculations. The optical properties of the atmosphere and its scatter types are shown in Fig.~\ref{fig:sph_albd_sim_saf}.
+
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[width=0.45\linewidth]{saf_01_A}
+  \includegraphics[width=0.45\linewidth]{saf_01_B}
+  \includegraphics[width=0.45\linewidth]{saf_01_C}
+  \includegraphics[width=0.45\linewidth]{saf_01_D}
+  \caption{Atmospheric properties for radiative transfer simulations. (A) The integro-normalised volume scattering function (scattering phase function) at 550~nm as a function of the scattering angle. (B) The single scattering albedo as a function of wavelength. (C) The optical thickness of the atmosphere as a function of wavelength, normalised by its value at 550~nm. (D) The vertical profile of optical thickness of the atmosphere at 550~nm, as a function of height above the surface, normalised by its value at the surface.}
+  \label{fig:sph_albd_sim_saf}
+\end{figure}
+
+Simulations were performed with an annular accumulator model, representing the symmetrical condition of near-nadir observation \citep{Reinersman1995}. Idealised atmospheres are used, with only Rayleigh or aerosol scatters, as the calculations for variable combinations of aerosol and Rayleigh can be well approximated by a weighted average of the end member functions, with weights given by their contribution to the spherical albedo. Simulations for aerosol scatters are performed per sensor, taking into account the average height of the orbit above the surface, the spectral response function of the wavebands and the its spatial resolutions. As the Rayleigh scattering phase function and single scattering albedo have no wavelength dependence, simulations are not performed per sensor and waveband, but at four surface pressures: 1100~mbar, 1013.25~mbar, 750~mbar, and 500~mbar, matching the pressure points of the ACOLITE LUTs. Simulations for aerosol scatters were performed at a $\tau_\text{aer} = 0.5$ (unitless), while the simulations for the Rayleigh scatter were performed at the Rayleigh optical thickness at 550~nm for each pressure. Simulations at fixed $\tau$ are expected to be representative of variable $\tau$ as the integro-normalised spatial kernels with the angular integrals of the atmosphere's BSSRDF and BSSTDF depend primarily on the scattering phase function and scattering albedo of the atmosphere and its height distribution.
+
+An indirect validation of the PSF and SAF simulations is provided in Fig.~\ref{fig:sph_albd_sim_val}, comparing the integrated PSF and SAF values with the upward diffuse transmittance and spherical albedo, respectively, calculated with the 6SV radiative transfer model.
+
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[width=0.45\linewidth]{saf_03_A}
+  \includegraphics[width=0.45\linewidth]{psf_03_A}
+  \caption{Indirect validation of the SAF (A) and PSF (B), by comparing the spherical albedo and upward diffuse transmittance from 6SV and the integral of the SAF and PSF from apsfs.}
+  \label{fig:sph_albd_sim_val}
+\end{figure}
+

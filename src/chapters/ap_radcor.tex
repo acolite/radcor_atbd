@@ -1,0 +1,20 @@
+\chapter{Pseudo-code: RAdCor} \label{ap:radcor}
+
+The pseudo-code of the RAdCor method to estimate surface reflectances from TOA imagery, when using the Neighbourhood complete method, is provided below:
+
+\begin{enumerate}
+  \item Retrieve the atmospheric pressure at the surface and the optical thickness of absorbing gases per band.
+  \item Retrieve or estimate aerosol optical properties.
+  \item For each waveband:
+      \begin{enumerate}
+          \item Calculate the integrated transmittances and reflectances of the atmosphere.
+          \item Calculate the truncated integro-normalised SAF, $\smash{\bunderline[4]{\hat{\curlyvee}}_\text{sph}(\hemiup \rightarrow \hemidn; \vec{x})}$ and the truncated atmospheric PSF, $\smash{\bunderline[4]{\curlywedge}_\text{b}(\hemiup \rightarrow \hat{\xi}_\text{D}; \vec{x})}$.
+          \item Calculate $\smash{\rho_\text{pc}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \vec{x})}$ by compensating $\smash{\rho_\text{as}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D} \vec{x})}$ for gaseous absorption and subtracting the path reflectance $\smash{\rho_\text{a}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D})}$.
+          \item Estimate the local (neighbourhood) average $\smash{\rho_{\text{pc}_\text{nb}}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \vec{x})}$ by convolving $\smash{\rho_\text{pc}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \vec{x})}$ with the integro-normalised uniform kernel, $\smash{\hat{U}}$.
+          \item With $\smash{\bunderline[4]{\hat{\curlyvee}}_\text{sph}(\hemiup \rightarrow \hemidn; \vec{x})}$, $\smash{1 - f_{\curlyvee_\text{b}}}$, $\smash{\rho_\text{pc}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \vec{x})}$, and $\smash{\rho_{\text{pc}_\text{nb}}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \vec{x})}$, estimate $\smash{\rho_{\text{pc}_{\curlyvee_\text{b}}}(\hemidn \rightarrow \hemiup; \vec{x})}$ and from it, estimate $\smash{\rho_{\text{s}_{\curlyvee_\text{b}}}(\hemidn \rightarrow \hemiup; \vec{x})}$.
+          \item Calculate $\smash{\bunderline[2]{\rho}_\text{pc}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \vec{x})}$ from $\smash{1 - f_{\curlywedge_\text{b}^*}}$, $\smash{\rho_\text{pc}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \vec{x})}$, and $\smash{\rho_{\text{pc}_\text{nb}}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \vec{x})}$.
+          \item Deconvolve $\smash{\bunderline[2]{\rho}_\text{pc}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \vec{x})}$ with $\smash{\bunderline[4]{\curlywedge}_\text{b}(\hemiup \rightarrow \hat{\xi}_\text{D}; \vec{x})}$ and scale by $\smash{1/T_{\text{d}_\text{tot}}(\hat{\xi}_0 \rightarrow \hemidn)}$ and $\smash{1 -\rho_{\text{s}_{\curlyvee_\text{b}}}(\hemidn \rightarrow \hemiup; \vec{x}) \, \rho_\text{b}(\hemiup \rightarrow \hemidn)}$ to retrieve $\smash{\rho_\text{s}(\vec{x})}$.
+    \end{enumerate}
+\end{enumerate}
+
+

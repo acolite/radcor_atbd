@@ -1,0 +1,74 @@
+\chapter{Retrieval of surface reflectances} \label{ch:radcor}
+
+With the aerosol properties provided externally or estimated from the imagery (\textit{e.g.}, Chapter~\ref{ch:ts_dsf}), the transmittances and reflectances terms of the atmosphere can be calculated with radiative transfer simulations for the observation geometry and a given standard atmospheric profile, or interpolated from a previously calculated LUT. These quantities can then be used with the appropriate measurement equation to retrieve the surface reflectance from the TOA observations.
+
+As in Chapter~\ref{ch:ts_dsf}, we will consider that the scene extent is large enough around the region of interest to contain the full area contributing to the diffusely transmitted signal from the surface to the sensor for the region of interest. The consequences and adaptations necessary to handle spatially finite kernels and scenes will be developed in Chapter~\ref{ch:finite}. However, the dependency of the spectral response function $\Lambda_w$ will be dropped in the equations of this chapter to simplify the presentation, as no spectral analysis is necessary. 
+
+\section{Retrieval over Homogeneous Lambertian surfaces}
+
+The measurement equation over homogeneous Lambertian surfaces, Eq.~\ref{eq:theory_lambertian_homogeneous}, can be rearranged to solve for the surface reflectance. For the DSF approach and other approaches that consider the atmosphere's composition to be constant within a given spatial extent, $\smash{\rho_\text{s}(\vec{x})}$ can be retrieved in that extent as:
+
+\begin{equation}
+\openup 2\jot
+\rho_\text{s}(\vec{x}_\text{b}) = \frac{ \rho_\text{pc}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \vec{x}_\text{a})}{T_{\text{d}_\text{tot}}(\hat{\xi}_0 \rightarrow \hemidn) \, T_{\text{u}_\text{tot}}(\hemiup \rightarrow \hat{\xi}_\text{D}) + \pi \, \rho_\text{pc}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \vec{x}_\text{a}) \, \rho_\text{b}(\hemiup \rightarrow \hemidn)},
+\label{eq:radcor_hm_inversion}
+\end{equation}
+
+\begin{equation}
+\rho_\text{pc}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \vec{x}_\text{a}) = \frac{\rho_\text{as}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \vec{x}_\text{a})}{T_\text{g}(\hat{\xi}_0; \hat{\xi}_\text{D})} - \rho_\text{a}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}),
+\label{eq:radcor_path_corrected}
+\end{equation} 
+
+\noindent where $\smash{\rho_\text{pc}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \vec{x})}$ is known as the ``path corrected'' TOA reflectance and the $\pi$ factor (with units of sr) converts between directional and hemispherical reflectances for the Lambertian BRDF. For approaches that calculate per pixel $\tau_\text{aer}(550)$ and aerosol model (\textit{e.g.}, as typical for the ``dark pixel'' approach), the atmospheric transmittances and reflectances are modified to be spatial functions, \textit{e.g.}, $\smash{\rho_\text{a}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \vec{x}_\text{a})}$.
+
+\section{Retrieval over Heterogeneous Lambertian surfaces}
+
+The measurement equation over Lambertian surfaces, Eq.~\ref{eq:theory_me_closed_form}, cannot be rearranged to solve for $\smash{\rho_\text{s}(\vec{x})}$, as was done in Eq.~\ref{eq:radcor_hm_inversion}, due to the convolution in the denominator. Therefore, our approach is to approximate $\smash{\rho_{\text{s}_{\curlyvee_\text{b}}}(\hemidn \rightarrow \hemiup; \vec{x}_\text{b})}$ directly from the TOA scene, keeping the denominator as presented in Eq.~\ref{eq:theory_comp_II_III_C2}:
+
+\begin{equation}
+\openup 2\jot
+1 - \bigr\{ \pi \, \rho_\text{s}(\hemidn \rightarrow \hat{\xi}_\text{D}; \vec{x}^\prime) \circledast \curlyvee_\text{b}(\hemiup \rightarrow \hemidn; \vec{x}^\prime) \bigr\} (\vec{x}_\text{b}) = 1 - \rho_{\text{s}_{\curlyvee_\text{b}}}(\hemidn \rightarrow \hemiup; \vec{x}_\text{b}) \, \rho_\text{b}(\hemiup \rightarrow \hemidn).
+\label{eq:radcor_denominator}
+\end{equation} 
+
+Typically, $\smash{\rho_{\text{s}_{\curlyvee_\text{b}}}(\hemidn \rightarrow \hemiup; \vec{x}_\text{b}) \, \rho_\text{b}(\hemiup \rightarrow \hemidn)}$ is lower than 10~\%, so uncertainties in $\smash{\rho_{\text{s}_{\curlyvee_\text{b}}}(\hemidn \rightarrow \hemiup; \vec{x}_\text{b})}$ will have a minor impact on the estimate of $\smash{\rho_\text{s}(\vec{x}_\text{b})}$. We estimate $\smash{\rho_{\text{s}_{\curlyvee_\text{b}}}(\hemidn \rightarrow \hemiup; \vec{x}_\text{b})}$ by first applying the integro-normalised SAF to the signal at TOA:
+
+\begin{equation}
+\openup 2\jot
+\frac{\rho_{\text{as}_{\curlyvee_\text{b}}}(\hemidn \rightarrow \hemiup; \vec{x}_\text{a})}{T_\text{g}(\hat{\xi}_0; \hat{\xi}_\text{D})} = \frac{\pi \, \rho_\text{as}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \vec{x}_\text{a})}{T_\text{g}(\hat{\xi}_0; \hat{\xi}_\text{D})} \circledast \hat{\curlyvee}_\text{b}(\hemiup \rightarrow \hemidn; \vec{x}_\text{a}),
+\label{eq:radcor_rho_env_sph_toa}
+\end{equation}
+
+\begin{equation}
+\openup 2\jot
+\hat{\curlyvee}_\text{b}(\hemiup \rightarrow \hemidn; \vec{x}) = \frac{\curlyvee_\text{b}(\hemiup \rightarrow \hemidn; \vec{x})}{\rho_\text{b}(\hemiup \rightarrow \hemidn)}.
+\label{eq:radcor_unit_saf}
+\end{equation}
+
+We can then estimate $\smash{\rho_{\text{s}_{\curlyvee_\text{b}}}(\hemidn \rightarrow \hemiup; \vec{x}_\text{b})}$ with an equation similar to Eq.~\ref{eq:radcor_hm_inversion}, as:
+
+\begin{equation}
+\openup 2\jot
+\rho_{\text{s}_{\curlyvee_\text{b}}}(\hemidn \rightarrow \hemiup; \vec{x}_\text{b}) \approx \frac{\rho_{\text{pc}_{\curlyvee_\text{b}}}(\hemidn \rightarrow \hemiup; \vec{x}_\text{a})}{T_{\text{d}_\text{tot}}(\hat{\xi}_0 \rightarrow \hemidn) \, T_{\text{u}_\text{tot}}(\hemiup \rightarrow \hat{\xi}_\text{D}) + \rho_{\text{pc}_{\curlyvee_\text{b}}}(\hemidn \rightarrow \hemiup; \vec{x}_\text{a}) \, \rho_\text{b}(\hemiup \rightarrow \hemidn)},
+\label{eq:radcor_rho_env_sph}
+\end{equation} 
+
+\begin{equation}
+\rho_{\text{pc}_{\curlyvee_\text{b}}}(\hemidn \rightarrow \hemiup; \vec{x}_\text{a}) = \frac{\rho_{\text{as}_{\curlyvee_\text{b}}}(\hemidn \rightarrow \hemiup; \vec{x}_\text{a})}{T_\text{g}(\hat{\xi}_0; \hat{\xi}_\text{D})} - \pi \, \rho_\text{a}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}).
+\label{eq:radcor_rho_env_sph_pc}
+\end{equation}
+
+The approximation is justified on the grounds that $\smash{\hat{\curlyvee}_\text{b}(\hemiup \rightarrow \hemidn; \vec{x})}$ has a much larger spatial scale than the diffuse PSF and causes intense blurring, strongly reducing the spatial contrast and reducing the calculations to the homogeneous surface case. 
+
+With the estimated $\smash{\rho_{\text{s}_{\curlyvee_\text{b}}}(\hemidn \rightarrow \hemiup;\vec{x}_\text{b})}$, it is possible to solve Eq.~\ref{eq:theory_me_closed_form} for $\smash{\rho_\text{s}(\vec{x}_\text{b})}$ with:
+
+\begin{equation}
+\openup 2\jot
+\rho_\text{s}(\vec{x}_\text{b}) = \frac{1 -\rho_{\text{s}_{\curlyvee_\text{b}}}(\hemidn \rightarrow \hemiup; \vec{x}_\text{b}) \, \rho_\text{b}(\hemiup \rightarrow \hemidn)}{\pi \, T_{\text{d}_\text{tot}}(\hat{\xi}_0 \rightarrow \hemidn)} \, \mathcal{F}^{-1}\Biggr\{\frac{\mathcal{F}\Bigr\{\rho_\text{pc}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \vec{x}_\text{a}) \Bigr\}}{\mathcal{F}\Bigr\{\curlywedge_\text{b}\!(\hemiup \rightarrow \hat{\xi}_\text{D}; \vec{x})\Bigr\}}\Biggr\},
+\label{eq:radcor_lambertian_scene_fourier}
+\end{equation} 
+
+\noindent where $\smash{\mathcal{F}}$ indicates the Fourier transform, $\smash{\mathcal{F}^{-1}}$ indicates the inverse Fourier transform, and we use the convolution theorem to convert the convolution in spatial domain to multiplication in the frequency domain. Therefore, if $\smash{\rho_{\text{s}_{\curlyvee_\text{b}}}(\hemidn \rightarrow \hemiup; \vec{x})}$ can be approximated, and the scene is large enough to cover 100~\% of $\smash{\curlywedge_\text{b}^*(\hemiup \rightarrow \hat{\xi}_\text{D}; \vec{x})}$ for the area of interest, it is possible to retrieve $\smash{\rho_\text{s}(\vec{x})}$ from knowledge of atmospheric optical properties.
+
+The pseudo-code of RAdCor is provided in Appendix~\ref{ap:radcor}.
+

@@ -1,0 +1,454 @@
+\chapter{Theoretical background} \label{ch:theory}
+
+In this chapter we will develop the monochromatic scalar measurement equation (ME) from the perspective of a sensor at the top of a planar and horizontally homogeneous atmosphere overlaying a planar surface. In this formulation, `monochromatic' means that transpectral processes are ignored \citep{Joiner1995,Sugihara1984,Latimer1956}, `scalar' means that polarisation is ignored \citep{Coulson1966}, `horizontally homogeneous' means that the atmosphere composition can vary only in the vertical dimension \citep{Vermote1997,Lenoble2007}, and `planar' means that the system is semi-infinite, formed by layers bounded by parallel infinite planes \citep[\textit{i.e.} curvature of the atmosphere-surface system and the topography are ignored;][]{Wu2023,Bulgarelli2018}. The surface is allowed to vary in its optical properties through its extent. This especial case, though limited in its representation of a general condition in remote sensing, has proven to be of great utility for interpretation of Earth observation data \citep[\textit{e.g.}][]{Vanhellemont2018}.
+
+The upwelling radiance (W~m$\smash{^{-2}}$~sr$\smash{^{-1}}$) quantified at the top of the atmosphere (TOA) can be conceptually decomposed into components representing different histories of interaction of light with the atmosphere-surface system \citep{Coulson1966,Tanre1979}. We choose to define those components in terms of functions describing surface reflectances, $\smash{\rho_\text{s}}$, different atmospheric reflectances, $\smash{\rho_\text{a}}$, and transmittances, $\smash{T}$. Our mathematical formulation of those components is based on the monochromatic scalar radiative transfer equation, with no internal sources. 
+
+The atmopshere-surface system is illuminated from above by the solar irradiance $\smash{E_{0_\perp}}$ (W~m$\smash{^{-2}}$) from the direction $\smash{\hat{\xi}_0}$:
+
+\begin{equation}
+E_0(\hat{\xi}_0) = E_{0_\perp} \, |\hat{\xi}_0 \cdot \hat{n}| ,
+\label{eq:theory_e0}
+\end{equation}
+
+\noindent where $\smash{\hat{\xi}}$ and $\smash{\hat{n}}$ represent three-dimensional unit vectors, with $\smash{\hat{n}}$ taken to represent the surface normal, and $\smash{|\cdot|}$ is the absolute dot product giving the cosine of the angle between unit vectors. In a plane-parallel system, $\smash{\hat{n}}$ is constant. The illumination is uniform and unidirectional (collimated rays) over the TOA. 
+
+Only two planes are considered: the TOA and the bottom of the atmosphere (BOA), which is the same as the surface. The TOA and BOA planes are indicated in the equations by `A' and `B', respectively. Positions in those planes are indicated by three-dimensional vectors, $\smash{\vec{x}}$, with subscripts `a' and `b' used to indicate that a position lies in the TOA plane, $\smash{\vec{x}_\text{a}}$, or BOA plane, $\smash{\vec{x}_\text{b}}$, respectively. Positions in one plane are related to positions in the other plane by:
+
+\begin{equation}
+\vec{x}_\text{b} = \vec{x}_\text{a} + \frac{H}{|\hat{\xi} \cdot \hat{n}|} \, \hat{\xi},
+\label{eq:theory_positions}
+\end{equation}
+
+\noindent where $H$ is the height of the atmosphere, and $\smash{\hat{\xi}}$ points from $\smash{\vec{x}_\text{a}}$ to $\smash{\vec{x}_\text{b}}$. The effects of atmospheric refraction are ignored to simplify the presentation.
+
+Starting from a more general monochromatic scalar ME which does not assume horizontally homogeneity of the atmosphere layer or isotropic nature of surface reflectances, we will develop it to a special case in which the surface reflectances are described by isotropic (Lambertian) reflectance distribution functions. The practical justification for this special case will be discussed at the end of the chapter.
+
+% Section -------------------------------------------------------------------
+\section{Atmospheric signal}
+
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[width=0.35\linewidth]{components_A}
+  \caption{Atmospheric signal component. Adapted from \citet{Tanre1979}.}
+  \label{fig:theory_components_A}
+\end{figure}
+
+The component \textbf{I} represented in Fig.~\ref{fig:theory_components_A} corresponds to light rays that have not interacted with the surface. It is reflected by the atmosphere into the detector in direction $\smash{\hat{\xi}}_\text{D}$ when the atmosphere is illuminated from above by Sun rays from direction $\smash{\hat{\xi}_0}$:
+
+\begin{equation}
+L_\text{I}(\hat{\xi}_\text{D}; \vec{x}_{\text{a}_\text{e}}) = E_0(\hat{\xi}_0) \int\limits_{A} d\vec{x}_{\text{a}_\text{i}} \curlyvee_{\!\text{a}}\!(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \vec{x}_{\text{a}_\text{i}} \rightarrow \vec{x}_{\text{a}_\text{e}}),
+\label{eq:theory_comp_I_C0}
+\end{equation}
+
+\noindent where $\smash{L_\text{I}(\hat{\xi}_\text{D}; \vec{x}_{\text{a}_\text{e}})}$ is the radiance of component I reaching the detector, the subscripts ``i'' and ``e'' represent the position of incidence and the position of exitance, respectively, and the integral is taken over the TOA. The function $\smash{\curlyvee_{\!\text{a}}(\hat{\xi}^\prime \rightarrow \hat{\xi}; \vec{x}^{\, \prime} \rightarrow \vec{x})}$, with units of m$^{-2}$~sr$^{-1}$, is the bidirectional scattering-surface reflectance distribution function \citep[BSSRDF;][]{Venable1974,Nicodemus1977} of the atmosphere when illuminated from above.
+
+As in our development the atmosphere is horizontally homogeneous, $\smash{\curlyvee_{\!\text{a}}(\hat{\xi}^\prime \rightarrow \hat{\xi}; \vec{x}^{\, \prime} \rightarrow \vec{x})}$ depends only on the distance between incidence and exitance and not on the specific positions, and Eq.~\ref{eq:theory_comp_I_C0} simplifies to:
+
+\begin{equation}
+L_\text{I}(\hat{\xi}_\text{D}; \vec{x}_{\text{a}_\text{e}}) = E_0(\hat{\xi}_0) \, \rho_\text{a}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}),
+\label{eq:theory_comp_I_C1}
+\end{equation}
+
+\noindent where the function $\smash{\rho_\text{a}(\hat{\xi}^\prime \rightarrow \hat{\xi})}$, with units of sr$^{-1}$, is the bidirectional reflectance distribution function \citep[BRDF;][]{Nicodemus1977} of the atmosphere when illuminated from above, and it is given by:
+
+\begin{equation}
+\rho_\text{a}(\hat{\xi}^\prime \rightarrow \hat{\xi}) = \int\limits_{A} d\vec{x}^{\, \prime}  \curlyvee_{\!\text{a}}\!(\hat{\xi}^\prime \rightarrow \hat{\xi}; \vec{x} - \vec{x}^{\, \prime}).
+\label{eq:theory_a_brdf}
+\end{equation}
+
+In our formulation, $\smash{\curlyvee_{\!\text{a}}(\hat{\xi}^\prime \rightarrow \hat{\xi}; \vec{x}^{\, \prime} \rightarrow \vec{x})}$, and consequently, $\smash{\rho_\text{a}(\hat{\xi}^\prime \rightarrow \hat{\xi})}$, includes all the effects of absorption and scattering (gaseous or particulate) occurring in the atmosphere. This will be the case for all atmospheric reflectance and transmittance functions in this chapter.
+ 
+% Section -------------------------------------------------------------------
+\section{Target surface signal}
+
+\begin{figure}[!htbp]
+  \centering
+  \begin{subfigure}{0.35\linewidth}
+  \includegraphics[width=\linewidth]{components_B}
+  \end{subfigure}
+  \begin{subfigure}{0.35\linewidth}
+  \includegraphics[width=\linewidth]{components_C}
+  \end{subfigure}
+  \caption{Target surface signal component. Adapted from \citet{Tanre1979}.}
+  \label{fig:theory_components_BC}
+\end{figure}
+
+The components represented in Fig.~\ref{fig:theory_components_BC} carry the signal of the surface target directly transmitted to the sensor when illuminated by light with different scattering histories. Component \textbf{II} in Fig.~\ref{fig:theory_components_BC} corresponds to the light rays transmitted downwards through the atmosphere, reflected by the target surface at position $\smash{\vec{x}_{\text{b}_0}}$ and directly transmitted to the sensor when the surface is illuminated by light that has not yet interacted with the surface. It can be calculated as:
+
+\begin{equation}
+\openup 2\jot
+\begin{split}
+L_\text{II}(\hat{\xi}_\text{D}; \vec{x}_{\text{a}_\text{e}}) &= E_0(\hat{\xi}_0) \, T_{\text{u}_\text{dir}}(\hat{\xi}_\text{D}; \vec{x}_{\text{b}_0}) \\
+&\times \Biggr\{ T_{\text{d}_\text{dir}}(\hat{\xi}_0; \vec{x}_{\text{a}_\text{i}}) \, \rho_\text{s}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \vec{x}_{\text{b}_0}) \\
+&+ \int\limits_\hemidn d\Omega(\hat{\xi}_1) \, |\hat{\xi}_1 \cdot \hat{n}| \int\limits_{A} d\vec{x}_{\text{a}_\text{i}} \curlywedge_\text{a}^*\!(\hat{\xi}_0 \rightarrow \hat{\xi}_1; \vec{x}_{\text{a}_\text{i}} \rightarrow \vec{x}_{\text{b}_0}) \, \rho_\text{s}(\hat{\xi}_1 \rightarrow \hat{\xi}_\text{D}; \vec{x}_{\text{b}_0}) \Biggr\},
+\end{split}
+\label{eq:theory_comp_II_C0}
+\end{equation} 
+
+\noindent where $\smash{T_{\text{u}_\text{dir}}(\hat{\xi}_\text{D}; \vec{x}_{\text{b}_0})}$, unitless, is the upward direct transmittance in the direction of the detector, $\smash{T_{\text{d}_\text{dir}}(\hat{\xi}_0; \vec{x}_{\text{a}_\text{i}})}$, unitless, is the downward direct transmittance of the atmosphere for the incident Sun irradiance, $\smash{\rho_\text{s}(\hat{\xi}^\prime \rightarrow \hat{\xi}; \vec{x}_{\text{b}_0})}$ is the BRDF of the surface target, the function $\smash{\curlywedge_\text{a}^*(\hat{\xi}^\prime \rightarrow \hat{\xi}; \vec{x}^{\,\prime} \rightarrow \vec{x})}$, with units of m$^{-2}$~sr$^{-1}$, is the diffuse bidirectional scattering-surface transmittance distribution function (BSSTDF) of the atmosphere when illuminated from above, $\smash{d\Omega(\hat{\xi})}$ is an element of solid angle centred on direction $\smash{\hat{\xi}}$, and the integral is taken over all directions in the downward hemisphere, $\smash{\hemidn}$.
+
+As in our development the atmosphere is defined to be horizontally homogeneous and the surface reflection functions to be isotropic, Eq.~\ref{eq:theory_comp_II_C0} simplifies to:
+
+\begin{equation}
+L_\text{II}(\hat{\xi}_\text{D}; \vec{x}_{\text{a}_\text{e}}) = E_0(\hat{\xi}_0) \, T_{\text{d}_\text{tot}}(\hat{\xi}_0 \rightarrow \hemidn) \, \rho_\text{s}(\vec{x}_{\text{b}_0})\, T_{\text{u}_\text{dir}}(\hat{\xi}_\text{D}),
+\label{eq:theory_comp_II_C2}
+\end{equation}
+
+\noindent where:
+
+\begin{equation}
+T_{\text{d}_\text{tot}}(\hat{\xi}^\prime \rightarrow \hemidn) = T_{\text{d}_\text{dir}}(\hat{\xi}^\prime) + T_{\text{d}_\text{dif}}(\hat{\xi}^\prime \rightarrow \hemidn),
+\label{eq:theory_tdtot}
+\end{equation}
+\begin{equation}
+T_{\text{d}_\text{dif}}(\hat{\xi}^\prime \rightarrow \hemidn) = \int\limits_{A} d\vec{x}^{\, \prime} \int\limits_\hemidn d\Omega(\hat{\xi}) \, |\hat{\xi} \cdot \hat{n}| \, \!\curlywedge_\text{a}^*\!(\hat{\xi}^\prime \rightarrow \hat{\xi}; \vec{x} - \vec{x}^{\, \prime}),
+\label{eq:theory_tddif}
+\end{equation}
+
+In Eq.~\ref{eq:theory_comp_II_C2} to Eq.~\ref{eq:theory_tddif}, the function $\smash{T_{\text{d}_\text{tot}}(\hat{\xi}^\prime \rightarrow \hemidn)}$, unitless, is the total downward transmittance of the atmosphere (or the downward directional-hemispherical transmittance), $\smash{T_{\text{d}_\text{dif}}(\hat{\xi}^\prime \rightarrow \hemidn)}$, unitless, is the diffuse downward transmittance of the atmosphere, and $\smash{\rho_\text{s}(\vec{x})}$, with units of sr$^{-1}$, can represent either the BRDF or the hemispherical-directional reflectance of the target surface, which are equal for Lambertian surfaces (\textit{cf.} Eq.~\ref{eq:theory_lambert}). Further, the direct transmittances $\smash{T_{\text{u}_\text{dir}}(\hat{\xi}^\prime)}$ in Eq.~\ref{eq:theory_comp_II_C2} and $\smash{T_{\text{d}_\text{dir}}(\hat{\xi}^\prime)}$ in Eq.~\ref{eq:theory_tdtot} are given by the attenuation law:
+
+\begin{equation}
+T_{\text{dir}}(\hat{\xi}^\prime) = \exp{\left(-\frac{\tau}{|\hat{\xi}^\prime \cdot \hat{n}|}\right)},
+\label{eq:theory_tdir}
+\end{equation}
+
+\noindent where $\smash{\tau}$, unitless, is the optical depth of the atmosphere. Note that because of the specific conditions being represented, dependence of position in the atmosphere and direction in surface reflectances was dropped in the above equations.
+
+The quantities involved in Eq.~\ref{eq:theory_comp_II_C2} cannot be measured directly from a remote platform and typically are not known for a general case. The reflectance of the target surface is unknown, while $\smash{T_{\text{d}_\text{tot}}(\hat{\xi}_0 \rightarrow \hemidn)}$ and $\smash{T_{\text{u}_\text{dir}}(\hat{\xi}_\text{D})}$ depend on the variable atmosphere composition and atmospheric pressure at the surface. 
+
+The component \textbf{III} in Fig.~\ref{fig:theory_components_BC} corresponds to the light rays that were transmitted downward through the atmosphere, reflected by the target surface at position $\smash{\vec{x}_{\text{b}_0}}$ and directly transmitted to the sensor when illuminated by light that has interacted with the surface at least once. This component represents part of the contribution of the sperical albedo for the atmospheric blurring. The magnitude of this component depends on the multiple interaction between the reflectance of the surrounding surfaces and the atmosphere. We will first consider a single order of interaction between the surface and the atmosphere before considering the more general situation of multiple interactions. The radiance from the first interaction, $\smash{L_{\text{III}_\text{1}}(\hat{\xi}_\text{D})}$, can be calculated as:
+
+\begin{equation}
+\openup 2\jot
+\begin{split}
+L_{\text{III}_\text{1}}&(\hat{\xi}_\text{D}; \vec{x}_{\text{a}_\text{e}}) = E_0(\hat{\xi}_0) \, T_{\text{u}_\text{dir}}(\hat{\xi}_\text{D}; \vec{x}_{\text{b}_0}) \int\limits_B d\vec{x}_{\text{b}_1} \int\limits_{\hemidn} d\Omega(\hat{\xi}_3) \, |\hat{\xi}_3 \cdot \hat{n}| \int\limits_{\hemiup} d\Omega(\hat{\xi}_2) \, |\hat{\xi}_2 \cdot \hat{n}| \\
+&\times \Biggr\{\Biggr[ T_{\text{d}_\text{dir}}(\hat{\xi}_0; \vec{x}_{\text{a}_\text{i}}) \, \rho_\text{s}(\hat{\xi}_0 \rightarrow \hat{\xi}_2; \vec{x}_{\text{b}_1}) \\
+&+ \int\limits_\hemidn d\Omega(\hat{\xi}_1) \, |\hat{\xi}_1 \cdot \hat{n}| \int\limits_{A} d\vec{x}_{\text{a}_\text{i}} \!\curlywedge_\text{a}^*\!(\hat{\xi}_0 \rightarrow \hat{\xi}_1; \vec{x}_{\text{a}_\text{i}} \! \rightarrow \vec{x}_{\text{b}_1}) \, \rho_\text{s}(\hat{\xi}_1 \rightarrow \hat{\xi}_2; \vec{x}_{\text{b}_1}) \Biggr] \\
+&\times \curlyvee_{\!\text{b}}(\hat{\xi}_2 \rightarrow \hat{\xi}_3; \vec{x}_{\text{b}_1} \!\rightarrow \vec{x}_{\text{b}_0}) \, \rho_\text{s}(\hat{\xi}_3 \rightarrow \hat{\xi}_\text{D}; \vec{x}_{\text{b}_0}) \Biggr\},
+\end{split}
+\label{eq:theory_comp_III_1_C0}
+\end{equation} 
+
+\noindent where $\smash{\curlyvee_{\!\text{b}}(\hat{\xi}^\prime \rightarrow \hat{\xi}; \vec{x}^{\, \prime} \rightarrow \vec{x})}$ is the BSSRDF of the atmosphere when illuminated from below (subscript ``b'' indicates incidence from the BOA), and $\smash{\hemiup}$ represents all directions in the upward hemisphere. The function $\smash{\curlyvee_{\!\text{b}}(\hat{\xi}^\prime \rightarrow \hat{\xi}; \vec{x}^{\, \prime}  \rightarrow \vec{x})}$ maps the contribution of light reflected in each direction from neighbouring surface elements to the energy reflected downwards by the atmosphere towards the target position. Its directional and spatial integral is the spherical albedo of the atmosphere.
+
+As in our development the atmosphere is horizontally homogeneous and surface reflection functions are isotropic, Eq.~\ref{eq:theory_comp_III_1_C0} simplifies to:
+
+\begin{equation}
+\openup 2\jot
+\begin{split}
+L_{\text{III}_1}&(\hat{\xi}_\text{D}; \vec{x}_{\text{a}_\text{e}}) = E_0(\hat{\xi}_0) \, T_{\text{d}_\text{tot}}(\hat{\xi}_0 \rightarrow \hemidn) \, T_{\text{u}_\text{dir}}(\hat{\xi}_\text{D}) \, \rho_\text{s}(\vec{x}_{\text{b}_0}) \\
+& \times \int\limits_B d\vec{x}_{\text{b}_1} \, \pi \, \rho_\text{s}(\vec{x}_{\text{b}_1}) \! \curlyvee_{\!\text{b}}\!(\hemiup \rightarrow \hemidn; \vec{x}_{\text{b}_0} \!- \vec{x}_{\text{b}_1}).
+\end{split}
+\label{eq:theory_comp_III_1_C2}
+\end{equation}
+
+\noindent where:
+
+\begin{equation}
+\curlyvee_{\!\text{b}}(\hemiup \rightarrow \hemidn; \vec{x} - \vec{x}^{\, \prime}) = \frac{1}{\pi} \int\limits_{\hemidn} d\Omega(\hat{\xi}) \, |\hat{\xi} \cdot \hat{n}| \int\limits_{\hemiup} d\Omega(\hat{\xi}^\prime) \, |\hat{\xi}^\prime \! \cdot \hat{n}| \! \curlyvee_{\!\text{b}}\!(\hat{\xi}^\prime \rightarrow \hat{\xi}; \vec{x} - \vec{x}^{\, \prime}).
+\label{eq:theory_bsstdf_bh}
+\end{equation}
+
+In Eq.~\ref{eq:theory_comp_III_1_C2} and Eq.~\ref{eq:theory_bsstdf_bh}, $\smash{\curlyvee_{\!\text{b}}(\hemiup \rightarrow \hemidn; \vec{x} - \vec{x}^{\, \prime})}$, with units of m$^{-2}$, is the bi-hemispherical integral of the BSSRDF of the atmosphere when illuminated from below. $\smash{\curlyvee_{\!\text{b}}(\hemiup \rightarrow \hemidn; \vec{x} - \vec{x}^{\, \prime})}$ can be understood as the spatially-resolved spherical albedo and is further discussed in Chapter~\ref{ch:sph_albd}. The $\smash{\pi}$~sr factor appearing in the above equations is the projected solid angle integral of an hemisphere. For a Lambertian BRDF:
+
+\begin{equation}
+\frac{1}{\pi} \, \rho(\hemidn \rightarrow \hemiup; \vec{x}) = \rho(\hemidn \rightarrow \hat{\xi}; \vec{x}) = \rho(\hat{\xi}^\prime \rightarrow \hat{\xi}; \vec{x}) = \rho(\vec{x}).
+\label{eq:theory_lambert}
+\end{equation}
+
+We note that the spatial integral in Eq.~\ref{eq:theory_comp_III_1_C2} is a convolution and can be presented in a more compact notation using the convolution operator, $\smash{\circledast}$:
+
+\begin{equation}
+\Bigr\{\pi \, \rho_\text{s}(\vec{x}^{\,\prime}) \circledast \! \curlyvee_{\!\text{b}}(\hemiup \rightarrow \hemidn; \vec{x}^{\,\prime})\Bigr\}(\vec{x}).
+\label{eq:theory_bhem_conv}
+\end{equation}
+
+A single order or interaction would be a sufficient approximation for component $\smash{L_\text{III}(\hat{\xi}_\text{D}; \vec{x}_{\text{a}_\text{e}})}$ if the surface reflectances and the spherical albedo have a small magnitude. However this is not expected to hold under all conditions in which aquatic remote sensing is of interest, due to the spectrally and temporally variable optical properties of the atmosphere, water and land. The contribution of component \textbf{III} account for all orders of interaction is given by:
+
+\begin{equation}
+\openup 2\jot
+\begin{split}
+L_\text{III}&(\hat{\xi}_\text{D}; \vec{x}_{\text{a}_\text{e}}) = E_0(\hat{\xi}_0) \, T_{\text{d}_\text{tot}}(\hat{\xi}_0 \rightarrow \hemidn) \, T_{\text{u}_\text{dir}}(\hat{\xi}_\text{D}) \, \rho_\text{s}(\vec{x}_{\text{b}_0}) \\
+& \times \sum\limits_{k = 1}^{\infty} \, \int\limits_B d^k\mathbf{x}_\text{b} \, \prod\limits_{j = 1}^{k} \, \pi \, \rho_\text{s}(\vec{x}_{\text{b}_j}) \! \curlyvee_{\!\text{b}}\!(\hemiup \rightarrow \hemidn; \vec{x}_{\text{b}_{j-1}} \!- \vec{x}_{\text{b}_j}),
+\end{split}
+\label{eq:theory_comp_III_all_C2}
+\end{equation}
+
+\noindent where $\smash{\sum}$ and $\smash{\prod}$ are the operators for the sum and product of a series, respectively, and $\smash{\mathbf{x}_\text{b}}$ includes all area elements $\smash{\vec{x}_{\text{b}_j}}$ from 1 to $k$. An alternative representation of this equation, substituting the integral, is given by:
+
+\begin{equation}
+\openup 2\jot
+\begin{split}
+L_\text{III}&(\hat{\xi}_\text{D}; \vec{x}_{\text{a}_\text{e}}) = E_0(\hat{\xi}_0) \, T_{\text{d}_\text{tot}}(\hat{\xi}_0 \rightarrow \hemidn) \, T_{\text{u}_\text{dir}}(\hat{\xi}_\text{D}) \, \rho_\text{s}(\vec{x}_{\text{b}_0}) \\
+& \times \sum\limits_{k = 1}^{\infty} \, \rho_\text{b}(\hemiup \rightarrow \hemidn)^k \, \prod\limits_{j = 1}^{k} \, \rho_{\text{s}_{\curlyvee_\text{b}}}(\hemidn \rightarrow \hemiup; \vec{x}_{\text{b}_{j-1}}),
+\end{split}
+\label{eq:theory_comp_III_all_C2B}
+\end{equation}
+
+where:
+
+\begin{equation}
+\rho_{\text{s}_{\curlyvee_\text{b}}}(\hemidn \rightarrow \hemiup; \vec{x}_{\text{b}_{j-1}}) = \frac{1}{\rho_\text{b}(\hemiup \rightarrow \hemidn)^j} \int\limits_B d^j\mathbf{x}_\text{b} \, \prod\limits_{i = 1}^{j} \, \pi \, \rho_\text{s}(\vec{x}_{\text{b}_i}) \! \curlyvee_{\!\text{b}}\!(\hemiup \rightarrow \hemidn; \vec{x}_{\text{b}_{i-1}} - \vec{x}_{\text{b}_i}),
+\label{eq:theory_bhem}
+\end{equation}
+
+and
+
+\begin{equation}
+\rho_\text{b}(\hemiup \rightarrow \hemidn) = \int\limits_B d\vec{x}^{\, \prime} \curlyvee_{\!\text{b}}\!(\hemiup \rightarrow \hemidn; \vec{x} - \vec{x}^{\, \prime}).
+\label{eq:theory_sa}
+\end{equation}
+
+In Eq.~\ref{eq:theory_comp_III_all_C2B} to Eq.~\ref{eq:theory_sa}, the function $\smash{\rho_{\text{s}_{\curlyvee_\text{b}}}(\hemidn \rightarrow \hemiup; \vec{x}_{\text{b}_{j-1}})}$, unitless, is the weighted average bi-hemispherical reflectance of the surfaces surrounding $\smash{\vec{x}_{\text{b}_{j-1}}}$ that contribute to the downwelling radiance $\smash{L(\hat{\xi}_{j+2})}$ (\textit{cf.} Fig.~\ref{fig:theory_components_BC}), and the function $\smash{\rho_\text{b}(\hemiup \rightarrow \hemidn)}$, unitless, is the bi-hemispherical reflectance of the atmosphere when illuminated from below (also known as spherical albedo).
+
+Further simplification of Eq.~\ref{eq:theory_comp_III_all_C2B} is possible with the assumption that the weighted average bi-hemispherical reflectance of the surfaces surrounding $\smash{\vec{x}_{\text{b}_{j-1}}}$ is approximately equal to $\smash{\rho_{\text{s}_{\curlyvee_\text{b}}}(\hemidn \rightarrow \hemiup; \vec{x}_{\text{b}_0})}$. As it will be shown in Chapter~\ref{ch:sph_albd} and Appendix~\ref{ap:apsfs}, the magnitude, spatial scale and radial profile of the spherical albedo is such that this is a reasonable assumption except at very high aerosol optical thickness ($>>1$). That is, the BSSRDF of the atmosphere when illuminated from below causes high blurring of the surface reflectance pattern and its contribution from high orders of interaction and positions distant from $\vec{x}_{\text{b}_0}$ is negligible. Under this approximation, Eq.~\ref{eq:theory_comp_III_all_C2B} simplifies to:
+
+\begin{equation}
+\openup 2\jot
+\begin{split}
+L_\text{III}&(\hat{\xi}_\text{D}; \vec{x}_{\text{a}_\text{e}}) = E_0(\hat{\xi}_0) \, T_{\text{d}_\text{tot}}(\hat{\xi}_0 \rightarrow \hemidn) \, T_{\text{u}_\text{dir}}(\hat{\xi}_\text{D}) \, \rho_\text{s}(\vec{x}_{\text{b}_0}) \\
+& \times \sum\limits_{k = 1}^{\infty} \Bigr\{ \rho_\text{b}(\hemiup \rightarrow \hemidn) \, \rho_{\text{s}_{\curlyvee_\text{b}}}(\hemidn \rightarrow \hemiup; \vec{x}_{\text{b}_0})\Bigr\}^k.
+\end{split}
+\label{eq:theory_comp_III_all_C2C}
+\end{equation}
+
+\hfill \break
+
+Combining components \textbf{II} and \textbf{III} we have:
+
+\begin{equation}
+\openup 2\jot
+\begin{split}
+L_\text{II+III}&(\hat{\xi}_\text{D}; \vec{x}_{\text{a}_\text{e}}) \\
+&= E_0(\hat{\xi}_0) \, T_{\text{d}_\text{tot}}(\hat{\xi}_0 \rightarrow \hemidn) \, \rho_\text{s}(\vec{x}_{\text{b}_0}) \, T_{\text{u}_\text{dir}}(\hat{\xi}_\text{D}) \, \sum\limits_{k = 0}^{\infty} \Bigr\{ \rho_\text{b}(\hemiup \rightarrow \hemidn) \, \rho_{\text{s}_{\curlyvee_\text{b}}}(\hemidn \rightarrow \hemiup; \vec{x}_{\text{b}_0})\Bigr\}^k \\
+& = E_0(\hat{\xi}_0) \, T_{\text{d}_\text{tot}}(\hat{\xi}_0 \rightarrow \hemidn) \, \frac{\rho_\text{s}(\vec{x}_{\text{b}_0})}{1- \rho_\text{b}(\hemiup \rightarrow \hemidn) \, \rho_{\text{s}_{\curlyvee_\text{b}}}(\hemidn \rightarrow \hemiup; \vec{x}_{\text{b}_0})} \, T_{\text{u}_\text{dir}}(\hat{\xi}_\text{D}).
+\end{split}
+\label{eq:theory_comp_II_III_C2}
+\end{equation}
+
+The closed form in the right hand side of Eq.~\ref{eq:theory_comp_II_III_C2} is possible because the base of the geometric series evaluates to a value between 0 and 1, and the series converges. 
+
+Before presenting the environmental signal, it is convenient to provide an alternative representation of Eq.~\ref{eq:theory_comp_II_III_C2}, by representing the direct upward transmission in the BSSTDF formalism:
+
+\begin{equation}
+\curlywedge_\text{b}^\cdot(\hat{\xi}^\prime \rightarrow \hat{\xi}; \vec{x} - \vec{x}^{\,\prime}) = \frac{1}{|\hat{\xi}^\prime \cdot \hat{n}|} \, T_{\text{u}_\text{dir}}(\hat{\xi}) \, \delta(\hat{\xi}^\prime-\hat{\xi}) \, \delta(\vec{x}^\prime - \vec{x}),
+\label{eq:theory_tudir_pulse_dd}
+\end{equation}
+\begin{equation}
+\begin{split}
+\curlywedge_\text{b}^\cdot(\hemiup \rightarrow \hat{\xi}; \vec{x} - \vec{x}^{\,\prime}) &= \frac{1}{\pi} \, \int\limits_{\hemiup} d\Omega(\hat{\xi}^\prime) \, |\hat{\xi}^\prime \cdot \hat{n}| \curlywedge_\text{b}^\cdot(\hat{\xi}^\prime \rightarrow \hat{\xi}; \vec{x} - \vec{x}^{\,\prime}) \\
+&= \frac{1}{\pi} \, \int\limits_{\hemiup} d\Omega(\hat{\xi}^\prime) \, T_{\text{u}_\text{dir}}(\hat{\xi}) \, \delta(\hat{\xi}^\prime-\hat{\xi}) \, \delta(\vec{x}^\prime - \vec{x}) \\
+&= \frac{1}{\pi} \, T_{\text{u}_\text{dir}}(\hat{\xi}) \, \delta(\vec{x}^\prime - \vec{x})
+\end{split}
+\label{eq:theory_tudir_pulse_d}
+\end{equation}
+
+where $\smash{\delta}$ are Dirac delta functions on directions (with units of sr$^{-1}$), and on positions (with units of m$^{-2}$). Note that the superscript $^\cdot$ is used for this direct component, while the superscript $^*$ was used for the diffuse component. The functions 
+$\smash{\curlywedge_\text{b}^\cdot(\hat{\xi}^\prime \rightarrow \hat{\xi}; \vec{x} - \vec{x}^{\,\prime})}$, with units of m$^{-2}$~sr$^{-1}$, is only non-zero in the direction $\smash{\hat{\xi}^\prime}$ and position $\smash{\vec{x}^{\,\prime}}$. Its integral over the incident hemisphere, $\smash{\curlywedge_\text{b}^\cdot(\hemiup \rightarrow \hat{\xi}; \vec{x} - \vec{x}^{\,\prime})}$, also with units of m$^{-2}$~sr$^{-1}$, is only non-zero in the position $\smash{\vec{x}^{\,\prime}}$.
+
+Inserting Eq.~\ref{eq:theory_tudir_pulse_d} in Eq.~\ref{eq:theory_comp_II_III_C2} and using the convolution notation, we have (\textit{cf.} Eq.~\ref{eq:theory_bhem_conv}, \ref{eq:theory_bhem}, and \ref{eq:theory_sa}):
+
+\begin{equation}
+\openup 2\jot
+\begin{split}
+L_\text{II+III}&(\hat{\xi}_\text{D}; \vec{x}_\text{a}) = E_0(\hat{\xi}_0) \, T_{\text{d}_\text{tot}}(\hat{\xi}_0 \rightarrow \hemidn) \\
+& \times \,\Biggl\{\frac{\pi \, \rho_\text{s}(\vec{x}^{\,\prime})}{1 - \bigl\{\pi \, \rho_\text{s}(\vec{x}^{\,\prime\prime}) \circledast \! \curlyvee_{\!\text{b}}(\hemiup \rightarrow \hemidn; \vec{x}^{\,\prime\prime})\bigl\}(\vec{x}^{\,\prime})} \circledast \curlywedge_\text{b}^\cdot(\hemiup \rightarrow \hat{\xi}_\text{D};\vec{x}^{\,\prime}) \Biggl\}(\vec{x}_{\text{a}_\text{e}}).
+\end{split}
+\label{eq:theory_comp_II_III_C2_pulse}
+\end{equation}
+
+\hfill \break
+
+% Section -------------------------------------------------------------------
+\section{Environmental signal}
+
+\begin{figure}[!htbp]
+  \centering
+  \begin{subfigure}{0.35\linewidth}
+  \includegraphics[width=\linewidth]{components_D}
+  \end{subfigure}
+  \begin{subfigure}{0.35\linewidth}
+  \includegraphics[width=\linewidth]{components_E}
+  \end{subfigure}
+  \caption{Surrounding surfaces signal component. Adapted from \citet{Tanre1979}.}
+  \label{fig:theory_components_DE}
+\end{figure}
+
+The final components, represented in Fig.~\ref{fig:theory_components_DE}, correspond to the environmental surface signal, \textit{i.e.} the signal reflected by surrounding surfaces and diffusely transmitted to the sensor. The formulation of component \textbf{IV} in Fig.~\ref{fig:theory_components_DE} is similar to that of Eq.~\ref{eq:theory_comp_II_C2}, but substituting the direct transmittance of the target surface reflectance when illuminated by light that has not interacted with the surface, $\smash{\rho_\text{s}(\hemidn \rightarrow \hat{\xi}_\text{D}; \vec{x}_{\text{b}_0}) \, T_{\text{u}_\text{dir}}(\hat{\xi}_\text{D})}$, by the diffuse transmittance of the environmental reflectance surrounding the target. Specifically, component \textbf{IV} can be calculated as:
+
+\begin{equation}
+\openup 2\jot
+\begin{split}
+L_\text{IV}&(\hat{\xi}_\text{D}; \vec{x}_{\text{a}_\text{e}}) = E_0(\hat{\xi}_0) \, \int\limits_{B} d\vec{x}_{\text{b}_1} \int\limits_{\hemiup} d\Omega(\hat{\xi}_2) \, |\hat{\xi}_2 \cdot \hat{n}| \\
+&\times \Biggr\{ \, T_{\text{d}_\text{dir}}(\hat{\xi}_0; \vec{x}_{\text{a}_\text{i}}) \, \rho_\text{s}(\hat{\xi}_0 \rightarrow \hat{\xi}_2; \vec{x}_{\text{b}_1})  \\
+& + \int\limits_\hemidn d\Omega(\hat{\xi}_1) \, |\hat{\xi}_1 \cdot \hat{n}| \int\limits_A d\vec{x}_{\text{a}_\text{i}} \curlywedge_\text{a}^*\!(\hat{\xi}_0 \rightarrow \hat{\xi}_1; \vec{x}_{\text{a}_\text{i}} \rightarrow \vec{x}_{\text{b}_1}) \, \rho_\text{s}(\hat{\xi}_1 \rightarrow \hat{\xi}_2; \vec{x}_{\text{b}_1}) \Biggr\} \\
+& \times \curlywedge_\text{b}^*(\hat{\xi}_2 \rightarrow \hat{\xi}_\text{D}; \vec{x}_{\text{b}_1} \rightarrow \vec{x}_{\text{a}_\text{e}}),
+\end{split}
+\label{eq:theory_comp_IV_C0}
+\end{equation}
+
+where $\smash{\curlywedge_\text{b}^*(\hat{\xi}^\prime \rightarrow \hat{\xi}; \vec{x}^{\,\prime} \rightarrow \vec{x})}$, with units of m$^{-2}$~sr$^{-1}$, is the atmospheric diffuse BSSTDF when illuminated from below.
+
+As in our development the atmosphere is horizontally homogeneous and surface reflection functions are isotropic, Eq.~\ref{eq:theory_comp_IV_C0} simplifies to:
+
+\begin{equation}
+L_\text{IV}(\hat{\xi}_\text{D}; \vec{x}_{\text{a}_\text{e}}) = E_0(\hat{\xi}_0) \, T_{\text{d}_\text{tot}}(\hat{\xi}_0 \rightarrow \hemidn)  \, \rho_{\text{s}_{\curlywedge_\text{b}^*}}(\hemidn \rightarrow \hemiup; \vec{x}_{\text{b}_0}) \, T_{\text{u}_\text{dif}}(\hemiup \rightarrow \hat{\xi}_\text{D}),
+\label{eq:theory_comp_IV_C2}
+\end{equation}
+
+\noindent where:
+
+\begin{equation}
+T_{\text{u}_\text{dif}}(\hemiup \rightarrow \hat{\xi}) = \int\limits_{B} d\vec{x}^{\, \prime} \curlywedge_\text{b}^*\!(\hemiup \rightarrow \hat{\xi}_\text{D}; \vec{x} - \vec{x}^{\, \prime}),
+\label{eq:theory_tudif}
+\end{equation}
+
+\begin{equation}
+\rho_{\text{s}_{\curlywedge_\text{b}^*}}(\hemidn \rightarrow \hemiup; \vec{x}_{\text{b}_0}) = \frac{1}{T_{\text{u}_\text{dif}}(\hemiup \rightarrow \hat{\xi})} \, \int\limits_{B} d\vec{x}_{\text{b}_1} \, \pi \, \rho_\text{s}(\vec{x}_{\text{b}_1}) \curlywedge_\text{b}^*\!(\hemiup \rightarrow \hat{\xi}_\text{D}; \vec{x}_{\text{a}_\text{e}} \! - \vec{x}_{\text{b}_1}),
+\label{eq:theory_rho_psf}
+\end{equation}
+
+\noindent and
+
+\begin{equation}
+\curlywedge_\text{b}^*(\hemiup \rightarrow \hat{\xi}; \vec{x} - \vec{x}^{\, \prime}) = \frac{1}{\pi}\int\limits_{\hemiup} d\Omega(\hat{\xi}^\prime) \, |\hat{\xi}^\prime \!\cdot \hat{n}| \curlywedge_\text{b}^*\!(\hat{\xi}^\prime \rightarrow \hat{\xi}; \vec{x} - \vec{x}^{\, \prime}).
+\label{eq:theory_bsstdf_hd}
+\end{equation}
+
+The integral over the incident hemisphere of the diffuse BSSTDF of the atmosphere when illuminated from below, $\smash{\curlywedge_\text{b}^*(\hemiup \rightarrow \hat{\xi}; \vec{x} - \vec{x}^{\, \prime})}$, with units of m$^{-2}$~sr$^{-1}$, is known as the the diffuse point spread function (PSF). The atmospheric PSF is further discussed in Chapter~\ref{ch:psf}. $\smash{T_{\text{u}_\text{dif}}(\hemiup \rightarrow \hat{\xi})}$, with units of sr$^{-1}$, is the upward hemispherical-directional diffuse transmittance of the atmosphere, and can be alternatively calculated as the incident average of the diffuse BTDF of the atmosphere when illuminated from below, $\smash{T_{\text{u}_\text{dif}}(\hat{\xi}^\prime \rightarrow \hat{\xi})}$, with units of sr$^{-1}$. For completeness, it should be noted that $\smash{T_{\text{u}_\text{dif}}(\hemiup \rightarrow \hat{\xi})}$ is related to the more common upward diffuse transmittance of the atmosphere, $\smash{T_{\text{u}_\text{dif}}(\hemiup \rightarrow \hemiup)}$, unitless, by $\smash{T_{\text{u}_\text{dif}}(\hemiup \rightarrow \hemiup) = \pi \, T_{\text{u}_\text{dif}}(\hemiup \rightarrow \hat{\xi})}$, assuming that $\smash{T_{\text{u}_\text{dif}}(\hemiup \rightarrow \hat{\xi})}$ is isotropic.
+
+As it was done for Eq.~\ref{eq:theory_comp_III_1_C2}, the convolution in Eq.~\ref{eq:theory_rho_psf} can be more conveniently represented as:
+
+\begin{equation}
+\Bigr\{\pi \rho_\text{s}(\vec{x}^{\,\prime}) \circledast \! \curlywedge_\text{b}^*(\hemiup \rightarrow \hat{\xi}; \vec{x}^{\, \prime})\Bigr\}(\vec{x}).
+\label{eq:theory_comp_IV_C2_conv}
+\end{equation}
+
+The last component, component \textbf{V} in Fig.~\ref{fig:theory_components_DE}, has the general development of Eq.~\ref{eq:theory_comp_III_1_C2}, but substituting the direct transmittance of the target surface reflectance when illuminated by light that has interacted with the surface at least once, $\smash{\rho_{\text{s}_2}(\hemidn \rightarrow \hat{\xi}_\text{D}; \vec{x}_{\text{b}_0}) \, T_{\text{u}_\text{dir}}(\hat{\xi}_\text{D})}$, by the diffuse transmittance of the environmental reflectance surrounding the target. Here again we start by considering the first order of interaction:
+
+\begin{equation}
+\openup 2\jot
+\begin{split}
+L_{\text{V}_\text{1}}&(\hat{\xi}_\text{D}; \vec{x}_{\text{a}_\text{e}}) = E_0(\hat{\xi}_0) \, \int\limits_B d\vec{x}_{\text{b}_2} \, \int\limits_{\hemidn} d\Omega(\hat{\xi}_4) \, |\hat{\xi}_4 \cdot \hat{n}| \\
+&\times \int\limits_B d\vec{x}_{\text{b}_1}  \, \int\limits_{\hemidn} d\Omega(\hat{\xi}_3) \, |\hat{\xi}_3 \cdot \hat{n}| \, \int\limits_{\hemiup} d\Omega(\hat{\xi}_2) \, |\hat{\xi}_2 \cdot \hat{n}| \\
+&\times \Biggr\{ \Biggr[ T_{\text{d}_\text{dir}}(\hat{\xi}_0; \vec{x}_{\text{a}_\text{i}}) \, \rho_\text{s}(\hat{\xi}_0 \rightarrow \hat{\xi}_2; \vec{x}_{\text{b}_1}) \\
+& + \int\limits_\hemidn d\Omega(\hat{\xi}_1) \, |\hat{\xi}_1 \cdot \hat{n}| \int\limits_A d\vec{x}_{\text{a}_\text{i}} \curlywedge_\text{a}^*\!(\hat{\xi}_0 \rightarrow \hat{\xi}_1; \vec{x}_{\text{a}_\text{i}} \rightarrow \vec{x}_{\text{b}_1}) \, \rho_\text{s}(\hat{\xi}_1 \rightarrow \hat{\xi}_2; \vec{x}_{\text{b}_1})\Biggr] \\
+&\times \curlyvee_\text{b}(\hat{\xi}_2 \rightarrow \hat{\xi}_3; \vec{x}_{\text{b}_1} \rightarrow \vec{x}_{\text{b}_2}) \, \rho_\text{s}(\hat{\xi}_3 \rightarrow \hat{\xi}_4; \vec{x}_{\text{b}_2}) \Biggr\} \curlywedge_\text{b}^*\!(\hat{\xi}_4 \rightarrow \hat{\xi}_\text{D}; \vec{x}_{\text{b}_2} \rightarrow \vec{x}_{\text{a}_\text{e}}).
+\end{split}
+\label{eq:theory_comp_V_1_C0}
+\end{equation} 
+
+The inner part is similar to Eq.~\ref{eq:theory_comp_III_1_C0} and since in our development the atmosphere is horizontally homogeneous and surface reflection functions are isotropic, the inner part is similar to Eq.~\ref{eq:theory_comp_III_1_C2}. Eq.~\ref{eq:theory_comp_V_1_C0} can then be represented as:
+
+\begin{equation}
+\openup 2\jot
+\begin{split}
+L_{\text{V}_\text{1}}&(\hat{\xi}_\text{D}; \vec{x}_{\text{a}_\text{e}}) = E_0(\hat{\xi}_0) \, T_{\text{d}_\text{tot}}(\hat{\xi}_0 \rightarrow \hemidn) \int\limits_B d\vec{x}_{\text{b}_1} \! \curlywedge_\text{b}^*(\hemiup \rightarrow \hat{\xi}_\text{D}; \vec{x}_{\text{a}_\text{e}} - \vec{x}_{\text{b}_1}) \, \pi \, \rho_\text{s}(\vec{x}_{\text{b}_1}) \\
+&\times \rho_{\text{s}_{\curlyvee_\text{b}}}(\hemidn \rightarrow \hemiup; \vec{x}_{\text{b}_1}) \, \rho_\text{b}(\hemiup \rightarrow \hemidn) .
+\end{split}
+\label{eq:theory_comp_V_1_C2}
+\end{equation} 
+
+As it was done for Eq.~\ref{eq:theory_comp_III_all_C2C}, Eq.~\ref{eq:theory_comp_V_1_C2} can be generalized to include all orders of interaction:
+
+\begin{equation}
+\openup 2\jot
+\begin{split}
+L_\text{V}&(\hat{\xi}_\text{D}; \vec{x}_{\text{a}_\text{e}}) = E_0(\hat{\xi}_0) \, T_{\text{d}_\text{tot}}(\hat{\xi}_0 \rightarrow \hemidn) \int\limits_B d\vec{x}_{\text{b}_1} \! \curlywedge_\text{b}^*(\hemiup \rightarrow \hat{\xi}_\text{D}; \vec{x}_{\text{a}_\text{e}} - \vec{x}_{\text{b}_1}) \, \pi \, \rho_\text{s}(\vec{x}_{\text{b}_1}) \\
+&\times \sum\limits_{k = 1}^{\infty} \Bigr\{ \rho_\text{b}(\hemiup \rightarrow \hemidn) \, \rho_{\text{s}_{\curlyvee_\text{b}}}(\hemidn \rightarrow \hemiup; \vec{x}_{\text{b}_1})\Bigr\}^k.
+\end{split}
+\label{eq:theory_comp_V_1_C2B}
+\end{equation} 
+
+To reach Eq.~\ref{eq:theory_comp_V_1_C2B}, the same assumption was made about $\smash{\rho_{\text{s}_{\curlyvee_\text{b}}}(\hemidn \rightarrow \hemiup; \vec{x}_{\text{b}})}$ as in the development of Eq.~\ref{eq:theory_comp_III_all_C2C}. And combining components IV and V, we have:
+
+\begin{equation}
+\openup 2\jot
+\begin{split}
+L_\text{IV + V}&(\hat{\xi}_\text{D}; \vec{x}_{\text{a}_\text{e}}) = E_0(\hat{\xi}_0) \, T_{\text{d}_\text{tot}}(\hat{\xi}_0 \rightarrow \hemidn) \int\limits_B d\vec{x}_{\text{b}_1} \! \curlywedge_\text{b}^*(\hemiup \rightarrow \hat{\xi}_\text{D}; \vec{x}_{\text{a}_\text{e}} - \vec{x}_{\text{b}_1}) \, \pi \, \rho_\text{s}(\vec{x}_{\text{b}_1}) \\
+&\times \sum\limits_{k = 0}^{\infty} \Bigr\{ \rho_\text{b}(\hemiup \rightarrow \hemidn) \, \rho_{\text{s}_{\curlyvee_\text{b}}}(\hemidn \rightarrow \hemiup; \vec{x}_{\text{b}_1})\Bigr\}^k. \\
+\therefore \\
+L_\text{IV + V}&(\hat{\xi}_\text{D}; \vec{x}_{\text{a}_\text{e}}) = E_0(\hat{\xi}_0) \, T_{\text{d}_\text{tot}}(\hat{\xi}_0 \rightarrow \hemidn) \\
+& \times \int\limits_B d\vec{x}_{\text{b}_1} \, \frac{\pi \, \rho_\text{s}(\vec{x}_{\text{b}_1})}{1 - \rho_\text{b}(\hemiup \rightarrow \hemidn) \, \rho_{\text{s}_{\curlyvee_\text{b}}}(\hemidn \rightarrow \hemiup; \vec{x}_{\text{b}_1})} \, \curlywedge_\text{b}^*(\hemiup \rightarrow \hat{\xi}_\text{D}; \vec{x}_{\text{a}_\text{e}} - \vec{x}_{\text{b}_1}).
+\end{split}
+\label{eq:theory_comp_IV_V_C2}
+\end{equation} 
+
+Finally, we can represent Eq.~\ref{eq:theory_comp_IV_V_C2} using the convolution notation with:
+
+\begin{equation}
+\openup 2\jot
+\begin{split}
+L_\text{IV + V}&(\hat{\xi}_\text{D}; \vec{x}_{\text{a}_\text{e}}) = E_0(\hat{\xi}_0) \, T_{\text{d}_\text{tot}}(\hat{\xi}_0 \rightarrow \hemidn) \\
+& \times \,\Biggl\{\frac{\pi \, \rho_\text{s}(\vec{x}^{\,\prime})}{1 - \bigl\{\pi \, \rho_\text{s}(\vec{x}^{\,\prime\prime}) \circledast \! \curlyvee_{\!\text{b}}(\hemiup \rightarrow \hemidn; \vec{x}^{\,\prime\prime})\bigl\}(\vec{x}^{\,\prime})} \circledast \curlywedge_\text{b}^*(\hemiup \rightarrow \hat{\xi}_\text{D};\vec{x}^{\,\prime}) \Biggl\}(\vec{x}_{\text{a}_\text{e}}).
+\end{split}
+\label{eq:theory_comp_IV_V_C2_conv}
+\end{equation} 
+
+\hfill\break
+
+% Section -------------------------------------------------------------------
+\section{The ME over Lambertian surfaces}
+
+Combining the five components developed previously, while transitioning from calculations for the target surface, $\smash{\vec{x}_{\text{b}_0}}$, to calculations for all positions $\smash{\vec{x}_{\text{b}}}$ on the surface, and normalising by the incident irradiance at TOA, $\smash{E_0(\hat{\xi}_0)}$, we have:
+
+\begin{equation}
+\openup 2\jot
+\begin{split}
+\rho_\text{as}&(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \vec{x}_\text{a}) =  \\
+&\rho_\text{a}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}) + T_{\text{d}_\text{tot}}(\hat{\xi}_0 \rightarrow \hemidn) \frac{\pi \, \rho_\text{s}(\vec{x}_\text{b})}{1 - \pi \, \rho_\text{s}(\vec{x}_\text{b}) \circledast \! \curlyvee_{\!\text{b}}(\hemiup \rightarrow \hemidn; \vec{x}_\text{b})} \circledast \curlywedge_\text{b}(\hemiup \rightarrow \hat{\xi}_\text{D};\vec{x}_\text{b}),
+\end{split}
+\label{eq:theory_me_closed_form}
+\end{equation} 
+
+\noindent where $\smash{\rho_\text{as}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \vec{x}_\text{a})}$, with units of sr$^{-1}$ is the BRDF of the atmosphere-surface system, and the atmospheric PSF, $\smash{\curlywedge_\text{b}(\hemiup \rightarrow \hat{\xi}_\text{D};\vec{x})}$, with units of m$^{-2}$~sr$^{-1}$, is given by:
+
+\begin{equation}
+\curlywedge_\text{b}(\hemiup \rightarrow \hat{\xi}_\text{D};\vec{x}) = \curlywedge_\text{b}^\cdot(\hemiup \rightarrow \hat{\xi}_\text{D};\vec{x}) + \curlywedge_\text{b}^*(\hemiup \rightarrow \hat{\xi}_\text{D};\vec{x}).
+\label{eq:theory_psf_tot}
+\end{equation} 
+
+The above equation is the approximate monochromatic scalar plane-parallel ME over horizontally homogeneous atmospheres overlaying lambertian surfaces. The approximation is related to the use of the first order convolution to represent the spatial pattern of all spatial functions mapping the multiple scatters between the atmosphere and the surface.
+
+% Section -------------------------------------------------------------------
+\section{The ME over homogeneous Lambertian surfaces}
+
+A final simplification worth noting arises if the reflectance of surface $S$ is homogeneous and Lambertian, as approximated by a desert surface or the open ocean with a smooth surface and $\smash{\hat{\xi}_\text{D}}$ away from the sun glint angle. Under those circumstances, the reflectances can be moved outside the convolutions, which then become simple spatial integrals of the kernels and the ME is given by:
+
+\begin{equation}
+\rho_\text{as}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}) = \rho_\text{a}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}) + T_{\text{d}_\text{tot}}(\hat{\xi}_0 \rightarrow \hemidn) \, \frac{\pi \,\rho_\text{s} }{1 - \pi \, \rho_\text{s} \, \rho_\text{b}(\hemiup \rightarrow \hemidn)} \, T_{\text{u}_\text{tot}}(\hemiup \rightarrow \hat{\xi}_\text{D}),
+  \label{eq:theory_lambertian_homogeneous}
+\end{equation}
+
+\noindent where
+
+\begin{equation}
+T_{\text{u}_\text{tot}}(\hemiup \rightarrow \hat{\xi}_\text{D}) =  T_{\text{u}_\text{dir}}(\hemiup \rightarrow \hat{\xi}_\text{D}) + T_{\text{u}_\text{dif}}(\hemiup \rightarrow \hat{\xi}_\text{D}),
+  \label{eq:theory_tutot}
+\end{equation}
+
+and 
+
+\begin{equation}
+T_{\text{u}_\text{dir}}(\hemiup \rightarrow \hat{\xi}_\text{D}) = \int\limits_B d\vec{x} \, \curlywedge_\text{b}^\cdot(\hemiup \rightarrow \hat{\xi}; \vec{x} - \vec{x}^{\,\prime}).
+  \label{eq:theory_thd_dir}
+\end{equation}
+
+In the above equations, both the angular and the spatial dependencies of the surface BRDF were removed, since the surface is lambertian and homogeneous. Note that in this case no approximation is necessary to provide a closed form representation, as the spatial patterns of the functions for all orders of interaction between the atmosphere and the surface are the same.
+
+% Section -------------------------------------------------------------------
+\section{Application of the MEs to remote observation data}
+
+The utility of the measurement equations developed in this chapter for the interpretation of Earth observation data is that they can be solved for the hemispherical-directional surface reflectance $\smash{\rho_\text{s}(\hemidn \rightarrow \hat{\xi}_\text{D}; \vec{x}_\text{b})}$. The spatially variable error in the solution for $\smash{\rho_\text{s}(\hemidn \rightarrow \hat{\xi}_\text{D}; \vec{x}_\text{b})}$, will depend, among other sources of error, of how well the system under observation is approximated by a given version of the scalar monochromatic equation. Here we further specify the underlying assumptions for the application of the measurement equations to Earth observation data over specific scenes and with specific sensors.
+
+The monochromatic equation will be a good approximation at wavelength ranges in which radiance gained by transpectral processes in the atmosphere-surface system is negligible compared to radiance generated by elastic scattering. Relevant examples of conditions that violate this assumption are narrow wavebands covering Fraunhofer lines, to which rotational and vibrational Raman scattering can add significant radiance \citep{Joiner1995,Vasilkov2002}. Though most Earth observation data does not include polarisation information, the scalar equation is justifiable only on the practical grounds that Mueller matrices of surface elements are typically not known in the general case. A similar argument will be made to justify the equation for Lambertian surfaces for the general case. Nevertheless, as long as the different atmospheric transmittances and reflectances are calculated taking in account polarisation, their polarisation average magnitudes can be plugged into the scalar equations developed in this chapter.
+
+Only the especial cases of Lambertian BRDFs were considered in this chapter. As commented before, this is because in the general case the angular distribution of the BRDFs of the surface elements in an arbitrary scene are not known in advance. One can envision an approach in which an approximate classification is applied to the TOA signal, attributing class-specific normalised BRDFs to different surface elements for the application of non-Lambertian equations. Alternatively, one could have a well known area routinely imaged, to which seasonal averaged normalised BRDFs would be known. However, those cases are beyond the scope of this project. In practice, since surfaces in the general case are not expected to be Lambertian, what is retrieved is the Lambert-equivalent hemispherical-directional surface reflectance, $\smash{\rho_\text{s}^\text{L}(\hemidn \rightarrow \hat{\xi}_\text{D}; \vec{x}_\text{b})}$, \textit{i.e.}, the reflectance value for a Lambertian surface that would make our calculations agree with our observations.
+
+Another important constraint was the condition of an horizontally homogeneous atmosphere. In reality, the atmosphere needs to be laterally homogeneous only in the volume significantly contributing to the measured signal. Nonetheless, the radius of the projected area from such a volume will typically be an order of magnitude larger than the radius over which homogeneity of the atmosphere is a reasonable assumption (\textit{cf}. Ch.~\ref{ch:sph_albd} and Ch.~\ref{ch:psf}). Still, the assumption is typically valid in the visible to SWIR spectral range as the majority of the signal (70~\% to 90~\%) will arise within a radius $<$ 5~km from the target surface.
+
+Other aspects to be considered are those of angular and spatial averages. The equations in this chapter were written from the perspective of a target surface element, $\smash{\vec{x}_{\text{b}_0}}$, considering a detector measuring light from $\smash{\hat{\xi}_\text{D}}$. A directional detector is a good approximation for high spatial resolution ($<$100~m) airborne or spaceborne detectors, as those typically have a field-of-view (FOV) for each detector element in the order of a few milirads. Nonetheless, due to the curvature of the Earth's surface, the measurements at the edges of large swaths (\textit{e.g.} Multispectral instrument/Sentinel-2) will result in larger range of angles projected at the surface. Further, at low spatial resolution ($>$1~km), the directional approximation will result in larger errors over surfaces with non-Lambertian BRDFs. Additionally, due to the altitude of those detectors, $\smash{\vec{x}_{\text{b}_0}}$ should be taken as the central coordinate of a discrete area observed by the detector element, represented by a pixel, over which the reflectance is averaged. This effectively converts the integrals over continuous spatial functions to sums over discrete spatial functions, though no compromise is contained in the continuous representation. The rest of this document will no longer identify different positions in the TOA and BOA planes, but rather refer to positions on the image, and subscripts of $\vec{x}$ will be dropped. 
+
+Another relevant aspect for the operational application of the measurement equations to Earth observation data is that simulation of the atmospheric transmittances and reflectances for the scene (illumination and observation angles, atmospheric composition and atmospheric surface pressure) is typically performed ahead of time, creating a reference multidimensional array known as Look-Up-Table (LUT). This is to gain efficiency, interpolating between previously calculated conditions instead of simulating specific ones. In that case, a typical approach to reduce the number of simulations (different combinations of conditions) is to assume a system in which all gaseous absorption is restricted to a thin layer at TOA and its impact described by the transmittance $\smash{T_\text{g}}$. This is because depending on the wavelength of observation different gases have dominant effects, and the relative abundance of those absorbing gases are variable in space and time. In our development of the measurement equation, the absorption from gases was included in the atmospheric transmittances and reflectance functions. However, the rest of this document will follow the thin absorbing layer approach, with the impact of absorbing gases given by $\smash{T_\text{g}}$. Another typical approach for operational interpretation of Earth observation data is to limit the simulations to a few representative aerosol models and a given vertical profile of atmosphere composition (particulate and gaseous). Similar to the LUT for the atmospheric transmittance and reflectance functions, integro-normalised spatial functions $\smash{\hat{\curlywedge}_\text{b}^*(\hemiup \rightarrow \hat{\xi}_\text{D}; \vec{x})}$ and $\smash{\hat{\curlyvee}_\text{b}(\hemiup \rightarrow \hemidn; \vec{x})}$ for each atmospheric scatter type are calculated ahead of time. Further details of those spatial function and their calculation are provided in Chapters~\ref{ch:sph_albd} and~\ref{ch:psf}.
+

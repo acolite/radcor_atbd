@@ -1,0 +1,46 @@
+\chapter{The spatially-resolved spherical albedo function} \label{ch:sph_albd}
+
+The spherical albedo is defined as the bi-hemispherical reflectance of the atmosphere when illuminated by an isotropic point source located at the bottom of the atmosphere \citep{Vermote1997,Tanre1979}. This definition is illustrated in Fig~\ref{fig:sph_albd_def}A. It quantifies the amount of energy emergent from the surface that is back-scattered by the atmosphere back to the surface. 
+
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[trim=0 0 0 2cm, clip, width=0.45\linewidth]{sph_def}
+  \includegraphics[trim=0 0 0 2cm, clip, width=0.45\linewidth]{sph_kernel}
+  \caption{Illustration of the atmospheric spherical albedo. (A) The spherical albedo as the ratio of the integral over the surface of the plane irradiance received by each surface element to the irradiance emitted by the point isotropic source. (B) The spherical albedo as the ratio of plane irradiance received by a surface element to the integral of the irradiance emitted by an infinite number of isotropic point sources at the surface.}
+  \label{fig:sph_albd_def}
+\end{figure}
+
+As described in Chapter~\ref{ch:theory}, the bi-hemispherical reflectance of the atmosphere when illuminated from below is the incident-average angular and spatial integral of the bidirectional scattering-surface reflectance distribution function (BSSRDF) of the atmosphere when illuminated by the surface, $\smash{\curlyvee_{\!\text{b}}(\hat{\xi}^\prime \rightarrow \hat{\xi}; \vec{x} - \vec{x}^{\, \prime})}$. Therefore, the spatially-resolved spherical albedo fuction (SAF), $\smash{\curlyvee_{\!\text{b}}(\hemiup \rightarrow \hemidn; \vec{x} - \vec{x}^{\, \prime})}$, is the incident-average angular integral of the BSSRDF. It is a spatial kernel that can be used for account the effects of an heterogeneous surface, as it maps the relative contribution of each surface element to the back-scattered downwelling plane irradiance received at the target surface element. The SAF kernel can be more intuitively linked to our application if we take the reciprocal definition of a plane irradiance received by a surface element when the surface plane has an infinite number of isotropic point sources. This definition is illustrated in Fig~\ref{fig:sph_albd_def}B.
+
+Since in our definition the system has no other sources than the Sun, the illumination entering the atmosphere from below arises from surface reflection. Therefore, the specification of an isotropic source in the spherical albedo definition results that the BRDF of the surface must be given by the Lambert model. This is inline with the definitions in Chapter~\ref{ch:theory}. Though it ignores the variable BRDF of surface types, it should be noted that if the surface elements have arbitrary BRDFs and are randomly azimuthally oriented, the Lambert model is a reasonable assumption due to the spatial averaging over the surface contributing to the back-scattered energy at any given position. The implicit Lambertian BRDF results in a SAF that has a radial symmetry, independent of the surface bi-hemispherical reflectance magnitude and illumination conditions.
+
+We can evaluate the SAF and the spherical albedo by simulation with a radiative transfer code \citep[\textit{cf.}][]{Leathers2004}. The radiative transfer calculations for RAdCor were carried out on a scalar backward Monte Carlo code specifically written for this project and available as a free and open source software (\textit{cf.} Appendix~\ref{ap:apsfs}). Fig.~\ref{fig:sph_albd_sim_kernel} shows two examples of SAF kernels for the 3rd waveband of the Operational Land Imager sensor on board Landsat 8. Figure~\ref{fig:sph_albd_sim_res} shows properties of the SAF for the different scatter types included in ACOLITE, while the magnitude and spectral dependency of the spherical albedo is shown in Fig.~\ref{fig:sph_albd_spectral}.
+
+Further information is provided in Appendix~\ref{ap:apsfs} on how the spatially-resolved spherical albedo functions are calculated, fitted and reconstructed in RAdCor/ACOLITE for a specific combination of Rayleigh and aerosol contribution.
+
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[width=0.45\linewidth]{saf_oli_r}
+  \includegraphics[width=0.45\linewidth]{saf_oli_c}
+  \caption{SAF discrete kernels for the 3rd band of the Operational Land Imager on board Landsat~8. (A) Integro-normalised kernel for the Rayleigh scatter at standard atmospheric pressure (1013.25~mbar). (B) Integro-normalised kernel for a continental aerosol type at $\tau_\text{aer}(550)=0.5$ (unitless).}
+  \label{fig:sph_albd_sim_kernel}
+\end{figure}
+
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[width=0.45\linewidth]{saf_02_A}
+  \includegraphics[width=0.45\linewidth]{saf_02_B}
+  \caption{Annular integral of the integro-normalised spatially-resolved spherical albedo function (A) and its cumulative distribution function (B).}
+  \label{fig:sph_albd_sim_res}
+\end{figure}
+
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[trim=0.8cm 0.75cm 0.65cm 2.1cm, clip, width=0.45\linewidth]{s_spectral_a}
+  \includegraphics[trim=0.8cm 0.75cm 0.65cm 2.1cm, clip, width=0.45\linewidth]{s_spectral_b}
+  \includegraphics[trim=0.8cm 0.75cm 0.65cm 2.1cm, clip, width=0.45\linewidth]{s_spectral_c}
+  \includegraphics[trim=0.8cm 0.75cm 0.65cm 2.1cm, clip, width=0.45\linewidth]{s_spectral_d}
+  \caption{The spherical albedo for the different scatter types included in ACOLITE. Continental (A), Maritime (B), and Urban (C) aerosols, as a function of the aerosol optical depth at~550 nm. (D) Rayleigh scatter, as a function of the atmospheric pressure at the surface.}
+  \label{fig:sph_albd_spectral}
+\end{figure}
+

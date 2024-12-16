@@ -1,0 +1,160 @@
+\chapter{Evaluation: Simulated scene 2} \label{ch:sim02}
+
+This Chapter follows the same structure, analysis and visualisations as in Chapter~\ref{ch:sim01}, but for a simulation representing a coastal scene. Calculations are performed with Eq.~\ref{eq:theory_me_closed_form} to simulate the signal that would be observed over the Spuikom lagoon in Belgium, with the Operational Land Imager (OLI) onboard Landsat 8. The scene contains only two types of targets: water and vegetation (Fig.~\ref{fig:sim02_surf_setup}A). Water is represented by the Spuikom lagoon, channels and the Belgian coastal zone (Fig.~\ref{fig:sim02_surf_setup}B). The major axis of the Spuikom lagoon is $\approx$ 1.4 km long.
+
+The atmospheric properties, calculated with 6SV, are the same as presented in Fig.~\ref{fig:sim01_atm_setup}. The resulting hemispherical-directional environmental reflectance for the upward diffuse transmittance, $\smash{\rho_{\text{s}_{\curlywedge_\text{b}^*}}(\hemidn \rightarrow \hat{\xi}_\text{D}; \Lambda_w; \vec{x})}$, and the bi-hemispherical environmental reflectance for the spherical albedo, $\smash{\rho_{\text{s}_{\curlyvee_\text{b}}}(\hemidn \rightarrow \hemiup; \Lambda_w; \vec{x})}$, for an $\smash{\tau_\text{aer}(865)}$ of 0.18~(unitless) are presented in Fig.~\ref{fig:sim02_env_averages}.
+
+\begin{figure}[!htbp]
+  \centering
+    \begin{subfigure}[t]{0.48\textwidth}
+      \centering
+      \includegraphics[trim={0 0.75cm 0 1cm},clip,width=\linewidth]{base_spectra.pdf}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.48\textwidth}
+      \centering
+      \includegraphics[trim={0 0.75cm 0 1cm},clip,width=\linewidth]{case_2_rho_s.pdf}
+    \end{subfigure}
+   \caption{Surface reflectance used in the simulation simulation. (A) Spectral hemispherical-directional reflectance of surface targets, scaled by $\smash{\pi}$~sr. (B) Surface pattern of the hemispherical-directional surface reflectance scaled by $\smash{\pi}$~sr for NIR waveband of OLI. In (A), subscript `w' stands for `water' and subscript `v' stands for `vegetation'. The grey polygons in the background show the relative spectral response functions of the first seven OLI wavebands.}
+   \label{fig:sim02_surf_setup}
+\end{figure}
+
+\begin{figure}[!htbp]
+  \centering
+    \begin{subfigure}[t]{0.48\textwidth}
+      \centering
+      \includegraphics[trim={0 2cm 0 1cm},clip,width=\linewidth]{case_2_rho_env_psf_c.pdf}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.48\textwidth}
+      \centering
+      \includegraphics[trim={0 2cm 0 1cm},clip,width=\linewidth]{case_2_rho_env_psf_m.pdf}
+    \end{subfigure}
+
+    \begin{subfigure}[t]{0.48\textwidth}
+      \centering
+      \includegraphics[trim={0 2cm 0 1cm},clip,width=\linewidth]{case_2_rho_env_sph_c.pdf}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.48\textwidth}
+      \centering
+      \includegraphics[trim={0 2cm 0 1cm},clip,width=\linewidth]{case_2_rho_env_sph_m.pdf}
+    \end{subfigure}
+
+   \caption{Environmental surface reflectances for an $\smash{\tau_\text{aer}(550)}$ of 0.3~(unitless). Hemispherical-directional environmental reflectance for the upward diffuse transmittance scaled by $\smash{\pi}$~sr, that is, the weighted average surface reflectance with weights given by $\smash{\hat{\curlywedge}_\text{b}(\hemiup \rightarrow \hat{\xi}_\text{D})}$, $\smash{\pi \, \rho_{\text{s}_{\curlywedge_\text{b}^*}}(\hemidn \rightarrow \hat{\xi}_\text{D})}$, for simulations with the continental aerosol model (A) and maritime aerosol model (B). Bi-hemispherical environmental reflectance for the spherical albedo, that is, the weighted average bi-hemispherical surface reflectance with weights given by $\smash{\hat{\curlyvee}_\text{b}(\hemiup \rightarrow \hemidn)}$, $\smash{\rho_{\text{s}_{\curlyvee_\text{b}}}(\hemidn \rightarrow \hemiup)}$, for simulations with the continental aerosol model (C) and maritime aerosol model (D). All variables presented for the NIR waveband of OLI, centred at wavelength 865~nm.}
+   \label{fig:sim02_env_averages}
+\end{figure}
+
+\section{Evaluation of TSDSF}
+
+As in Chapter~\ref{ch:sim01}, we let the predefined $\smash{\tau_\text{aer}(550)}$ be equal to the $\smash{\tau_\text{aer}(550)}$ used in the simulations and use a large PSF radius (25~km), to isolate the error of the approximation described in Eq.~\ref{eq:est_rho_e_toa} from other source of errors. Fig.~\ref{fig:sim02_hyp_estimate} shows the ratio of the estimated function, $\smash{\rho_\text{as}^\text{Hyp Est.}}$, to the reference function, $\smash{\rho_\text{as}^\text{Hyp Ref.}}$, calculated with Eq.~\ref{eq:ret_rho_env_toa} for an $\smash{\tau_\text{aer}(865)}$ of 0.18~(unitless). For those example conditions, the maximum error in the estimation was $< 15$~\% for simulations with both aerosol models. The higher values were observed at intermediate distances from the coast for the maritime aerosol model, and were higher than the maximum error of $< 10$~\% for the inland simulation.
+
+\begin{figure}[!htbp]
+  \centering
+    \begin{subfigure}[t]{0.48\textwidth}
+      \centering
+      \includegraphics[trim={0 2cm 0 1cm},clip,width=\linewidth]{case_2_eval_rho_env_toa_c.pdf}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.48\textwidth}
+      \centering
+      \includegraphics[trim={0 2cm 0 1cm},clip,width=\linewidth]{case_2_eval_rho_env_toa_m.pdf}
+    \end{subfigure}
+    
+   \caption{Evaluation of the estimation of $\smash{\rho_\text{as}^\text{Hyp}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \Lambda_w; \vec{x})}$ from $\smash{\rho_\text{as}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \Lambda_w; \vec{x})}$. (A) Ratio of $\smash{\rho_\text{as}^\text{Hyp Est.}}$ to $\smash{\rho_\text{as}^\text{Hyp Ref.}}$ for the simulation with the continental aerosol model; (B) same as (A) but for the simulation with the maritime aerosol model. ``Est.'' stands for estimated value and ``Ref.'' stands for reference value.}
+   \label{fig:sim02_hyp_estimate}
+\end{figure}
+
+We evaluate the propagated uncertainty through TSDSF using the $\tau_\text{aer}(550)$ estimation error as a metric. First we evaluate the impact of different predefined values of $\tau_\text{aer}(550)$, isolating it from errors related to the finite PSF by using a large PSF radius~(25 km). The results, presented in Fig.~\ref{fig:sim02_tsdsf_all_aot}, for a wide range of reference and predefined $\tau_\text{aer}(550)$ show the same main patterns as observed for the inland scene in Chapter~\ref{ch:sim01}: (1) There is an overall tendency of underestimation of $\tau_\text{aer}(550)$ which is proportional to the $\tau_\text{aer}(550)$ used in the simulation. (2) The estimation improves for all simulated $\tau_\text{aer}(550)$ for larger values of predefined $\tau_\text{aer}(550)$. Further, in specific circumstances, TSDSF estimates the incorrect aerosol model for maritime aerosol simulations, resulting also in larger errors in $\tau_\text{aer}(550)$ estimation. However, the magnitude of the reference $\tau_\text{aer}(550)$ at which the underestimation of $\tau_\text{aer}(550)$ became significant was larger than for the inland scene, likely due to the larger water surface in the coastal scene, indicating that the maximum atmospheric turbidity at which TSDSF is expected to provide a good estimation of aerosol properties will depend on the scene composition.
+
+\begin{figure}[!htbp]
+  \centering
+    \begin{subfigure}[t]{0.48\textwidth}
+      \centering
+      \includegraphics[trim={0 0.75cm 0 1cm},clip,width=\linewidth]{case_2_eval_ts_dsf_aot_c.pdf}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.48\textwidth}
+      \centering
+      \includegraphics[trim={0 0.75cm 0 1cm},clip,width=\linewidth]{case_2_eval_ts_dsf_aot_m.pdf}
+    \end{subfigure}
+   \caption{TSDSF estimation error of $\tau_\text{aer}(550)$. $\tau_\text{aer}(550)$ estimation error for simulations with the continental aerosol model (A) and the maritime aerosol model (B). The X-axis provides the $\tau_\text{aer}(550)$ used in the simulation, while the Y-axis provides the $\tau_\text{aer}(550)$ used for the TSDSF estimation.}
+   \label{fig:sim02_tsdsf_all_aot}
+\end{figure}
+
+The effect of the PSF extent on the TSDSF estimation was isolated by using the best predefined $\tau_\text{aer}(550)$ from the previous analysis, 1 (unitless), and evaluated by performing the TSDSF approach over a range of PSF radius from 2.5~km to 25~km. As for Fig.~\ref{fig:sim01_tsdsf_all_psf}, Fig.~\ref{fig:sim02_tsdsf_all_psf} shows that the $\tau_\text{aer}(550)$ estimation error is largely independent of PSF extent. 
+
+\begin{figure}[!htbp]
+  \centering
+    \begin{subfigure}[t]{0.48\textwidth}
+      \centering
+      \includegraphics[trim={0 0.75cm 0 1cm},clip,width=\linewidth]{case_2_eval_ts_dsf_psf_c.pdf}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.48\textwidth}
+      \centering
+      \includegraphics[trim={0 0.75cm 0 1cm},clip,width=\linewidth]{case_2_eval_ts_dsf_psf_m.pdf}
+    \end{subfigure}
+   \caption{TSDSF estimation error of $\tau_\text{aer}(550)$. $\tau_\text{aer}(550)$ estimation error for simulations with the continental aerosol model (A) and the maritime aerosol model (B). The X-axis provides the $\tau_\text{aer}(550)$ used in the simulation, while the Y-axis provides the PSF extent used for the TSDSF estimation.}
+   \label{fig:sim02_tsdsf_all_psf}
+\end{figure}
+
+\section{Evaluation of RAdCor}
+
+With the estimated aerosol model and concentration, the optical functions of the atmosphere can be calculated. These, together with the estimation of $\smash{\rho_{\text{s}_{\curlyvee_\text{b}}}(\hemidn \rightarrow \hemiup; \Lambda_w; \vec{x})}$, can be plugged in to Eq.~\ref{eq:radcor_lambertian_scene_fourier_finite} to retrieve $\smash{\rho_\text{s}(\hemidn \rightarrow \hat{\xi}_\text{D}; \Lambda_W; \vec{x})}$.
+
+The approximations required to estimate $\smash{\rho_{\text{s}_{\curlyvee_\text{b}}}(\hemidn \rightarrow \hemiup; \Lambda_w; \vec{x})}$ are evaluated directly by setting the aerosol model and $\tau_\text{aer}(550)$ to the same values used in the simulation, and by using a PSF extent of 25~km. Fig.~\ref{fig:sim02_env_sph_est} shows an example for the simulations with $\tau_\text{aer}(550) = 0.3$ (unitless). Errors were $< 10$~\%, higher than the errors for the coastal scene ($< 5$~\%). Interestingly, the intense blurring resulted in an error gradient following the orientation of the coastline. This can be expected due to the large adjacent surfaces of water and land. This gradient was more intense for the maritime aerosol, again related to the larger forward peak of its scattering phase function when compared to the continental aerosol model. Though the errors in the estimation of $\smash{\rho_{\text{s}_{\curlyvee_\text{b}}}(\hemidn \rightarrow \hemiup; \Lambda_w; \vec{x})}$ were higher and the spatial contrast of $\smash{\rho_{\text{s}_{\curlyvee_\text{b}}}(\hemidn \rightarrow \hemiup; \Lambda_w; \vec{x})}$ (Fig.~\ref{fig:sim02_env_averages}C and D) was also higher than for the inland simulation, the evaluation of the retrieved surface reflectances suggests that the approximation given by Eq.~\ref{eq:radcor_rho_env_sph} is still valid.
+
+\begin{figure}[!htbp]
+  \centering
+    \begin{subfigure}[t]{0.48\textwidth}
+      \centering
+      \includegraphics[trim={0 2cm 0 1cm},clip,width=\linewidth]{case_2_eval_rho_env_sph_c_est.pdf}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.48\textwidth}
+      \centering
+      \includegraphics[trim={0 2cm 0 1cm},clip,width=\linewidth]{case_2_eval_rho_env_sph_m_est.pdf}
+    \end{subfigure}
+   \caption{Evaluation of the $\smash{\rho_{\text{s}_{\curlyvee_\text{b}}}(\hemidn \rightarrow \hemiup; \Lambda_w; \vec{x})}$ estimate against the reference value calculated with Eq.~\ref{eq:theory_bhem} for the OLI waveband centered at 865~nm. (A) Ratio for the Continental model simulation; (B) Ratio for the Maritime model simulation.}
+   \label{fig:sim02_env_sph_est}
+\end{figure}
+
+We again isolate the effect of the PSF extent by performing the atmospheric correction using the reference $\tau_\text{aer}(550)$ and aerosol model, an evaluate the retrieval over a range of PSF radius. Fig.~\ref{fig:sim01_radcor_all} shows the average surface reflectance estimation error over the Spuikom lagoon. Here, the improvement in the retrievals with larger PSF radius, with the lower boundary dependent on the $\tau_\text{aer}(550)$ used in the simulation, seen for the inland simulation was not observed. The minimum PSF radius was approximately constant around 10~km regardless of the reference $\tau_\text{aer}(550)$ used in the simulations. As noted in Chapter~\ref{ch:sim01}, preliminary evaluations with real imagery showed little improvement for kernel radius above 5~km.
+
+\begin{figure}[!htbp]
+  \centering
+    \begin{subfigure}[t]{0.48\textwidth}
+      \centering
+      \includegraphics[trim={0 0.75cm 0 2.2cm},clip,width=\linewidth]{case_2_eval_radcor_abs_c}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.48\textwidth}
+      \centering
+      \includegraphics[trim={0 0.75cm 0 2.2cm},clip,width=\linewidth]{case_2_eval_radcor_abs_m}
+    \end{subfigure}
+    
+    \begin{subfigure}[t]{0.48\textwidth}
+      \centering
+      \includegraphics[trim={0 0.75cm 0 2.2cm},clip,width=\linewidth]{case_2_eval_radcor_rel_c}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.48\textwidth}
+      \centering
+      \includegraphics[trim={0 0.75cm 0 2.2cm},clip,width=\linewidth]{case_2_eval_radcor_rel_m}
+    \end{subfigure}
+
+   \caption{Evaluation of atmospheric correction over the Spuikom lagoon for different finite PSF radius. Difference between the average estimated surface reflectance and the reference reflectance for the continental model simulations (A) and maritime model simulations (B). Ratio of the average estimated surface reflectance and the reference reflectance for the continental model simulations (C) and maritime model simulations (D). The reference $\tau_\text{aer}(550)$ for each simulation was used for the correction.}
+   \label{fig:sim02_radcor_all}
+\end{figure}
+
+\section{Combined evaluation of TSDSF and RAdCor}
+
+Here, the aerosol properties used for the correction are taken from the TSDSF estimation. The impact of the underestimation of $\tau_\text{aer}(550)$ can be clearly seen in Fig.~\ref{fig:sim02_full_eval}. The larger errors for the maritime model in part result from its spectral properties (\textit{cf.} Fig.~\ref{fig:sph_albd_sim_saf}). The spectral properties of the maritime aerosol model result in higher $\tau_\text{aer}$ in the NIR and SWIR for a given $\tau_\text{aer}(550)$ when compared to the continental aerosol model. In the simulations, the lowest $\tau_\text{aer}(550)$ estimated with TSDSF per band was always from the NIR and SWIR bands. For the continental aeorsol model, these wavebands will present a lower atmospheric turbidity than for the maritime aerosol model at comparable $\tau_\text{aer}(550)$.
+
+Despite the insights provided by the simulations, validation with real imagery will be necessary to evaluate which aspects of the interpretations from the analysis with simulated scenes are directly applicable to real imagery, specially the magnitudes of estimation errors. The validation with real imagery against in situ reference surface reflectance will be provided in a separate document.   
+
+\begin{figure}[!htbp]
+  \centering
+    \begin{subfigure}[t]{0.48\textwidth}
+      \centering
+      \includegraphics[trim={0 0.75cm 0 1cm},clip,width=\linewidth]{case_2_full_eval_c.pdf}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.48\textwidth}
+      \centering
+      \includegraphics[trim={0 0.75cm 0 1cm},clip,width=\linewidth]{case_2_full_eval_m.pdf}
+    \end{subfigure}
+   \caption{Evaluation of $\smash{\rho_\text{s}}$ with the combination of TSDSF and RAdCor for the OLI waveband centred at 865~nm. (A) Estimation for the continental model simulation. (B) Estimation for the maritime model simulation. The grey horizontal line provides the reference $\smash{\pi\,\rho_\text{s}(865)}$ value.}
+   \label{fig:sim02_full_eval}
+\end{figure}

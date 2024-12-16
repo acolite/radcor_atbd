@@ -1,0 +1,188 @@
+\chapter{Estimation of atmospheric optical properties} \label{ch:ts_dsf}
+
+The optical depth due to gaseous scattering \citep{Bodhaine1999} can be well approximated from standard atmosphere models \citep[\textit{e.g.},][]{US1976} modified by the atmospheric pressure at the surface. The atmospheric pressure at the surface itself is available daily and in global coverage from meteorological data assimilation and models \citep[\textit{e.g.}][]{Kanamitsu2002}, or can be well approximated by local altitude available from global coverage surface elevation models \citep[\textit{e.g.}][]{Airbus2022}. Additionally, external information is typically available daily and in global coverage about the concentration of absorbing gases from suits of Earth observation missions designed for atmospheric observation. Scattering due to turbulent flow (\textit{e.g.}, convection due to surface heating) is a minor effect for vertical observations through the atmosphere and is typically neglected. Therefore, the crucial component is the estimation of the aerosol optical properties, which depends on the aerosol model (composition and size distribution) and vertical profile, with the later typically taken as a standard profile \citep[\textit{e.g.},][]{Hess1998}.
+
+The atmosphere's bidirectional reflectance when illuminated from above, $\smash{\rho_\text{a}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D})}$, presented as component \textbf{I} in Fig.~\ref{fig:theory_components_A} is the basis for estimating aerosol properties from remote observations when external information about the aerosols is not available. It corresponds to the signal that would be observed if the entire surface $S$ was non-reflective at the wavelength of observation or at wavelengths of large atmosphere optical thickness with low single scattering albedo, in which case the signal from the surface is not transmitted to the sensor. For those reasons, this component cannot be directly observed in wavelength ranges of interest for surface observation, but it can be approximated by the signal recorded over surfaces of low reflectance over a large spatial scale. An example of such a condition are observations over the open ocean in the near-infrared (NIR), which is well approximated by the homogeneous surface framework due to the low contrast between adjacent surface areas. Alternatively, $\smash{\rho_\text{a}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D})}$ can be approximated by the signal recorded over patches of surfaces of low reflectance under relatively low atmospheric scattering, as the recorded signal will include only small amounts of signal from the surrounding surfaces \citep[\textit{e.g.} in the shortwave-infrared, SWIR, for low to moderate aerosol concentration;][]{Fraser1964}. In the later, while the surface system does not conform to the homogeneous surface framework, the upward diffuse transmittance of the atmosphere is small such that the homogeneous surface framework applies locally over the low reflective patch. For turbid atmospheres over patchy surfaces, however, the contribution of the diffusely transmitted signal from surrounding surfaces to the signal recorded over the low reflective patch can result in a poor approximation to $\smash{\rho_\text{a}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D})}$.
+
+In this chapter we will provide an overview of two well known approaches for estimation of aerosol composition and concentration developed under the homogeneous surface reflectance framework and develop a more general method for estimation of those properties that can be applied over heterogeneous surfaces. In the development of the equations of this chapter, we will consider that the scene extent is large enough around the region of interest to contain the full area contributing to the diffusely transmitted signal from the surface to the sensor for the region of interest. The consequences and adaptations necessary to handle spatially finite kernels and scenes will be developed in Chapter~\ref{ch:finite}.
+
+% Section -------------------------------------------------------------------
+\section{Aerosol estimation over homogeneous surfaces}
+
+One commonly used approach for estimation of aerosol properties is known as the ``black pixel'' approach\endnotemark{}, developed for estimation of aerosol properties over open ocean scenes \citep{Gordon1994}. Pure (sea)water has a high absorption coefficient in the NIR and SWIR, while open ocean waters are typically characterised by low concentration of hydrosols, resulting that for observations avoiding the sun glint, the water system reflectance from the NIR to SWIR is negligible when compared to $\smash{\rho_\text{a}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D})}$. This can be represented as:
+
+\endnotetext{The term ``black pixel'' is somewhat a misnomer for this approach, as the pixel is assumed to be non-reflective only at some wavebands. The term ``NIR-SWIR black pixel'' would better describe the approach.}
+
+\begin{equation}
+\frac{\rho_\text{as}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \Lambda_w; \vec{x})}{T_\text{g}(\hat{\xi}_0; \hat{\xi}_\text{D}; \Lambda_w)} =  \rho_\text{a}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \Lambda_w; \vec{x}) + \varepsilon(\Lambda_w),
+\label{eq:ts_dsf_rhoa}
+\end{equation}
+
+\noindent where $\smash{\Lambda_w}$ is the normalised spectral response function (SRF) of waveband $w$, $\smash{T_\text{g}(\hat{\xi}_0; \hat{\xi}_\text{D}; \Lambda_w)}$, unitless, is the transmittance due to gaseous absorption for the illumination-observation geometry, and $\smash{\varepsilon(\Lambda_w)}$ is the residual signal from the surface, typically on the order of $\approx 1~\%$ of $\smash{\rho_\text{a}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \Lambda_w)}$ and can be neglected. This signal can be compared against simulations of $\smash{\rho_\text{a}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \Lambda_w)}$ for atmospheres with different aerosol compositions and concentrations, given by the aerosol optical thickness, $\smash{\tau_\text{aer}(\Lambda_w)}$. The spectra, in case more than one waveband is available where the surface can be considered ``dark'', is used to select the aerosol model that provides the best fit to the spectral observation, when considering the external inputs of atmospheric pressure at the surface, absorbing gases concentration and illumination-observation geometry. The selection of aerosol model is essential to estimate the aerosol optical effects in other wavebands in which the surface signal cannot be considered negligible. Because the spectral shape of the aerosol optical thickness is defined by the aerosol model, it is typical to specify the aerosol optical thickness at a single wavelength, commonly at 550 nm, $\smash{\tau_\text{aer}(550)}$. This ``black pixel'' approach is typically applied per pixel, allowing the atmosphere composition to vary between neighbouring pixels, thus $\smash{\rho_\text{a}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \Lambda_w; \vec{x})}$ retaining the spatial dependency in Eq.~\ref{eq:ts_dsf_rhoa}.
+
+When every pixel for an arbitrary scene cannot be expected to be ``black'' in any of the wavebands available for the sensor, an alternative to the ``black pixel'' is the ``Dark Spectrum Fitting'' approach \citep{Vanhellemont2018}. This method was developed in the context of high spatial resolution sensors, that could resolve shadows of structures in the scene, extrapolating the aerosol parameters estimated over the dark patch to a larger spatial extent. In this method, the pixels with the lowest $\smash{\rho_\text{as}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \Lambda_w; \vec{x})}$ in each waveband are selected to build a ``dark spectrum'' at TOA, $\smash{\rho_\text{as}^\text{TDark}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \Lambda_w)}$. The dark spectrum is interpreted with Eq.~\ref{eq:ts_dsf_rhoa}, resulting in one estimation of $\smash{\tau_\text{aer}(550)}$ per waveband and per aerosol model, with the selection of the lowest $\smash{\tau_\text{aer}(550)}$ for each aerosol model. The selection of the lowest $\smash{\tau_\text{aer}(550)}$ for a given aerosol model ensures a lower bound fit of $\smash{\rho_\text{a}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \Lambda_w)}$ to $\smash{\rho_\text{as}^\text{TDark}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \Lambda_w)}$, that is, it ensures that surface reflectances are non-negative. The aerosol model is selected as before, based on the best lower bound fit between $\smash{\rho_\text{a}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \Lambda_w)}$ to $\smash{\rho_\text{as}^\text{TDark}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \Lambda_w)}$ over all aerosol models. This approach is typically applied per scene or per spatial subsets of the scene (\textit{e.g.} 7~km $\times$ 7~km), also called ``tiles'', over which the atmosphere is assumed to have the same composition, thus the spatial dependency is dropped from $\smash{\rho_\text{a}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \Lambda_w)}$ in Eq.~\ref{eq:ts_dsf_rhoa}.
+
+While the DSF approach, under the assumption of homogeneity of the atmosphere over a given spatial scale, in essence generalises the ``black pixel'' approach by not prescribing the wavebands with near-zero surface reflectance, it is still limited to situations of low atmospheric turbidity. When the upward diffuse transmittance increases, the darkest pixel at TOA might not be the darkest pixel at the surface, depending on the reflectance contrast and spatial dimensions of near-by surfaces. Even for scenes where the darkest pixel at TOA and at the surface are equivalent, $\smash{\varepsilon(\Lambda_w)}$ might be non-negligible due to the adjacency signal from surrounding bright surfaces. In other words, the method of selection of reference pixels in DSF does not consider the impact of surrounding surfaces and the interpretation of the signal over the reference pixels does not consider the effect of atmospheric blurring.
+
+% Section -------------------------------------------------------------------
+\section{Aerosol estimation over heterogeneous surfaces}
+
+In RAdCor we further generalise the DSF method from a homogeneous surface framework to a heterogeneous surface framework. We do this by estimating $\smash{\tau_\text{aer}(550)}$ not from $\smash{\rho_\text{as}^\text{TDark}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \Lambda_w)}$ but from the TOA signal of the darkest pixels at the surface, $\smash{\rho_\text{as}^{\text{SDark}}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \Lambda_w)}$. As discussed before, the darkest pixel at the surface might not be the darkest pixel at TOA due to the diffuse transmittance of the spatially variable reflectance of the surrounding pixels. We attempt to find the darkest pixels at the surface by introducing an hypothetical quantity, $\smash{\rho_\text{as}^\text{Hyp}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \Lambda_w; \vec{x})}$. This quantity is the apparent surface reflectance at TOA that would be observed if all upward transmittance was diffuse. It is defined based on Eq.~\ref{eq:theory_me_closed_form} as:
+
+\begin{equation}
+\openup 2\jot
+\begin{split}
+&\frac{\rho_\text{as}^\text{Hyp}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \Lambda_w; \vec{x})}{T_\text{g}(\hat{\xi}_0; \hat{\xi}_\text{D}; \Lambda_w)} = \\ 
+& \rho_\text{a}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \Lambda_w) + T_{\text{d}_\text{tot}}(\hat{\xi}_0 \rightarrow \hemidn; \Lambda_w) \, \rho_{\text{s}_{\!\curlywedge_\text{b}^*}}(\hemidn \rightarrow \hemiup; \Lambda_w; \vec{x}) \, T_{\text{u}_\text{tot}}(\hemiup \rightarrow \hat{\xi}_\text{D}; \Lambda_w),
+\end{split}
+\label{eq:ret_rho_env_toa}
+\end{equation} 
+\begin{equation}
+\openup 2\jot
+\begin{split}
+\rho_{\text{s}_{\!\curlywedge_\text{b}^*}}&(\hemidn \rightarrow \hemiup; \Lambda_w; \vec{x}) = \\
+&\left\{ \frac{\rho_\text{s}(\Lambda_w; \vec{x}^\prime)}{1 - \left[ \pi \, \rho_\text{s}(\Lambda_w; \vec{x}^{\prime\prime}) \circledast \! \curlyvee_{\!\text{b}}(\hemiup \rightarrow \hemidn; \Lambda_w; \vec{x}^{\prime\prime}) \right]\!(\vec{x}^\prime)} \circledast \pi \hat{\curlywedge}_\text{b}^*(\hemiup \rightarrow \hat{\xi}_\text{D};\Lambda_w;\vec{x}^\prime) \right\} (\vec{x}),
+\end{split}
+\label{eq:ret_rho_env}
+\end{equation}
+\begin{equation}
+\hat{\curlywedge}_\text{b}^*(\hemiup \rightarrow \hat{\xi}_\text{D};\Lambda_w;\vec{x}) = \frac{\curlywedge_\text{b}^*(\hemiup \rightarrow \hat{\xi}_\text{D};\Lambda_w;\vec{x})}{T_{\text{u}_\text{dif}}(\hemiup \rightarrow \hat{\xi}_\text{D};\Lambda_w)},
+\label{eq:unit_diff_psf}
+\end{equation}
+
+\noindent where $\smash{\hat{\curlywedge}_\text{b}^*(\hemiup \rightarrow \hat{\xi}_\text{D}; \Lambda_w; \vec{x})}$, with units of m$^{-2}$~sr$^{-1}$, is the integro-normalised diffuse PSF. $\smash{\rho_\text{as}^\text{Hyp}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \Lambda_w; \vec{x})}$ can be estimated directly from $\smash{\rho_\text{as}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \Lambda_w; \vec{x})}$ and $\smash{\hat{\curlywedge}_\text{b}^*(\hemiup \rightarrow \hat{\xi}_\text{D}; \Lambda_w; \vec{x})}$ for each aerosol model as:
+
+\begin{equation}
+\openup 2\jot
+\frac{\rho_\text{as}^\text{Hyp}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \Lambda_w; \vec{x})}{T_\text{g}(\hat{\xi}_0; \hat{\xi}_\text{D}; \Lambda_w)} \approx \left\{ \frac{\rho_\text{as}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \Lambda_w; \vec{x}^\prime)}{T_\text{g}(\hat{\xi}_0; \hat{\xi}_\text{D}; \Lambda_w)} \circledast \hat{\curlywedge}_\text{b}^*(\hemiup \rightarrow \hat{\xi}_\text{D}; \Lambda_w; \vec{x}^\prime) \right\}(\vec{x}),
+\label{eq:est_rho_e_toa}
+\end{equation}
+
+\noindent where the approximation expands to:
+
+\begin{equation}
+\openup 2\jot
+\begin{split}
+&\left\{\frac{\rho_\text{as}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \Lambda_w; \vec{x}^\prime)}{T_\text{g}(\hat{\xi}_0; \hat{\xi}_\text{D}; \Lambda_w)} \circledast \hat{\curlywedge}_\text{b}^*(\hemiup \rightarrow \hat{\xi}_\text{D}; \Lambda_w; \vec{x}^\prime) \right\}(\vec{x}) = \\
+&\quad \rho_\text{a}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \Lambda_w) + T_{\text{d}_\text{tot}}(\hat{\xi}_0 \rightarrow \hemidn; \Lambda_w) \\
+&\quad \times \Biggr\{T_{\text{u}_\text{dir}}(\hemiup \rightarrow \hat{\xi}_\text{D}; \Lambda_w) \, \rho_{\text{s}_{\!\curlywedge_\text{b}^*}}(\hemidn \rightarrow \hemiup; \Lambda_w; \vec{x}) \\
+&\quad\,\,+ T_{\text{u}_\text{dif}}(\hemiup \rightarrow \hat{\xi}_\text{D}; \Lambda_w) \, \left[ \rho_{\text{s}_{\!\curlywedge_\text{b}^*}}(\hemidn \rightarrow \hemiup; \Lambda_w; \vec{x}^{\prime}) \circledast \hat{\curlywedge}_\text{b}^*(\hemiup \rightarrow \hat{\xi}_\text{D}; \Lambda_w; \vec{x}^{\prime}) \right]\!(\vec{x}) \Biggr\}.
+\end{split}
+\label{eq:est_rho_e_toa_expansion}
+\end{equation}
+
+It can be seen from the comparison of Eq.~\ref{eq:ret_rho_env_toa} with Eq.~\ref{eq:est_rho_e_toa_expansion} that the approximation in Eq.~\ref{eq:est_rho_e_toa} requires that $\smash{\rho_{\text{s}_{\!\curlywedge_\text{b}^*}}(\hemidn \rightarrow \hemiup; \Lambda_w; \vec{x})}$ is approximately unchanged after a second convolution with the integro-normalised diffuse PSF. That is:
+
+\begin{equation}
+\openup 2\jot
+\left\{\rho_{\text{s}_{\!\curlywedge_\text{b}^*}}(\hemidn \rightarrow \hemiup; \Lambda_w; \vec{x}^\prime) \circledast \hat{\curlywedge}_\text{b}^*(\hemiup \rightarrow \hat{\xi}_\text{D}; \Lambda_w; \vec{x}^\prime)\right\}\!(\vec{x}) \approx \rho_{\text{s}_{\!\curlywedge_\text{b}^*}}(\hemidn \rightarrow \hemiup; \Lambda_w; \vec{x}).
+\label{eq:est_rho_e_toa_condition}
+\end{equation}
+
+The hypothetical quantity $\smash{\rho_\text{as}^\text{Hyp}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \Lambda_w; \vec{x})}$ is the basis for finding the darkest pixels at the surface and estimating the aerosol model and $\smash{\tau_\text{aer}(550)}$. We note that at this stage, aerosol properties are not known, such that the estimation of the hypothetical quantity is performed for each desired aerosol model. Our simulations, explored in Chapters~\ref{ch:sim01} and~\ref{ch:sim02} have shown that most predefined $\smash{\tau_\text{aer}(550)}$ values to calculate $\smash{\rho_\text{as}^\text{Hyp}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \Lambda_w; \vec{x})}$ will result in good estimation of the aerosol model and $\smash{\tau_\text{aer}(550)}$, however, the best performance was found when $\smash{\tau_\text{aer}(\lambda) >> \tau_\text{ray}(\lambda)}$. This is because the Rayleigh diffuse PSF has more weight away from the target pixel than the diffuse PSF for aerosols, causing a higher blurring on the $\smash{\rho_\text{as}^\text{Hyp}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \Lambda_w; \vec{x})}$ estimation. Since the estimation process with Eq.~\ref{eq:est_rho_e_toa} inherently causes additional blurring, an aerosol only diffuse PSF decreases the amount of this additional blurring. Further details are provided in Chapters~\ref{ch:sim01} and~\ref{ch:sim02}.
+
+% Subsection -------------------------------------------------------------------
+\subsection{Detection of darkest pixels at the surface}
+
+The position of the darkest pixels at the surface in each waveband $w$ can be found from the TOA imagery with:
+
+\begin{equation}
+\openup 2\jot
+\vec{x}_\text{SDark}(\Lambda_w) = \argmin\limits_{\vec{x}} \Biggr\{ \frac{\rho_\text{as}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \Lambda_w; \vec{x})^2}{\rho_\text{as}^\text{Hyp}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \Lambda_w; \vec{x})} \Biggr\},
+\label{eq:darkest_pixel_surf}
+\end{equation}
+
+\noindent where the argmin operator finds the pixel with the lowest ratio in each waveband. The justification behind this heuristic is that the ratio of the TOA signal to the hypothetical quantity is proportional to the ratio of the target reflectance component to the environmental reflectance component. That is:
+
+\begin{equation}
+\openup 2\jot
+\frac{\rho_\text{as}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \Lambda_w; \vec{x})}{\rho_\text{as}^\text{Hyp}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \Lambda_w; \vec{x})} \propto \frac{\rho_{\text{s}_{\!\curlywedge_\text{b}}}(\hemidn \rightarrow \hemiup; \Lambda_w; \vec{x})}{\rho_{\text{s}_{\!\curlywedge_\text{b}^*}}(\hemidn \rightarrow \hemiup; \Lambda_w; \vec{x})},
+\label{eq:darkest_pixel_surf_prop}
+\end{equation}
+
+\noindent where
+
+\begin{equation}
+\openup 2\jot
+\begin{split}
+\rho_{\text{s}_{\!\curlywedge_\text{b}}}&(\hemidn \rightarrow \hemiup; \Lambda_w; \vec{x}) = \\
+&\left\{ \frac{\rho_\text{s}(\Lambda_w; \vec{x}^\prime)}{1 - \left[ \pi \, \rho_\text{s}(\Lambda_w; \vec{x}^{\prime\prime}) \circledast \! \curlyvee_{\!\text{b}}(\hemiup \rightarrow \hemidn; \Lambda_w; \vec{x}^{\prime\prime}) \right]\!(\vec{x}^\prime)} \circledast \pi \hat{\curlywedge}_\text{b}(\hemiup \rightarrow \hat{\xi}_\text{D};\Lambda_w;\vec{x}^\prime) \right\} (\vec{x}),
+\end{split}
+\label{eq:ret_rho_ave_total}
+\end{equation}
+\begin{equation}
+\hat{\curlywedge}_\text{b}(\hemiup \rightarrow \hat{\xi}_\text{D};\Lambda_w;\vec{x}) = \frac{\curlywedge_\text{b}(\hemiup \rightarrow \hat{\xi}_\text{D};\Lambda_w;\vec{x})}{T_{\text{u}_\text{tot}}(\hemiup \rightarrow \hat{\xi}_\text{D};\Lambda_w)}.
+\label{eq:unit_psf}
+\end{equation}
+
+Eq.~\ref{eq:darkest_pixel_surf_prop} shows that the small values ($< 1$) will indicate pixels with the larger upscaling adjacency and larger values ($> 1$) will indicate pixels with the higher downscaling adjacency. This information is not sufficient, however, to select the darkest pixel at the surface, as the pixel with the largest upscaling adjacency effect might not be the darkest, it needs only to be the pixel with higher contrast in its immediate surroundings. Therefore, the ratio is scaled by the TOA signal (Eq.~\ref{eq:darkest_pixel_surf}) to take in account absolute reflectance values.
+
+The heuristic is demonstrated in Fig.~\ref{fig:tsdsf_demo}. The scene is simulated for the OLI/Landsat~8 sensor, with the surface reflectance (Fig.~\ref{fig:tsdsf_demo}A) propagated to TOA considering an atmosphere laden with continental aerosol particles at an $\smash{\tau_\text{aer}(550)}$ of 0.5. The scene contains a series of aligned overlapping squares with constant (Lambertian) bi-hemispherical reflectances of 0.65, 0.01, 0.05, 0.1, 0.2, 0.3 and 0.4 (unitless), from border to centre. The main diagonal however is substituted by a fluctuating reflectance pattern, having true zero at the centre of the scene. As it can be seen in Fig.~\ref{fig:tsdsf_demo}B, the darkest pixel at TOA is over a region with surface bi-hemispherical reflectance of 0.01 (unitless). Similarly, Fig.~\ref{fig:tsdsf_demo}C shows that the lowest ratio $\smash{\rho_\text{as}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \Lambda_w; \vec{x}) / \rho_\text{as}^\text{Hyp}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \Lambda_w; \vec{x})}$ is over the region with surface Lambert-equivalent reflectance of 0.01 (unitless), adjacent to the region with Lambert-equivalent reflectance of 0.65 (unitless). The proposed scaled ratio, shown in Fig~\ref{fig:tsdsf_demo}D, correctly identifies the pixels with lowest reflectance at the surface, in this case, 0 (unitless).
+
+\begin{figure}[!htbp]
+  \centering
+    \begin{subfigure}[t]{0.48\textwidth}
+      \centering
+      \includegraphics[trim={0 2cm 0 0},clip,width=\linewidth]{case_0_rho_s.pdf}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.48\textwidth}
+      \centering
+      \includegraphics[trim={0 2cm 0 0},clip,width=\linewidth]{case_0_surface_profile.pdf}
+    \end{subfigure}
+
+  \vspace{0.1cm}
+
+    \begin{subfigure}[t]{0.48\textwidth}
+      \centering
+      \includegraphics[trim={0 2cm 0 0},clip,width=\linewidth]{case_0_ratio_profile.pdf}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.48\textwidth}
+      \centering
+      \includegraphics[trim={0 2cm 0 0},clip,width=\linewidth]{case_0_scaled_ratio_profile.pdf}
+    \end{subfigure}
+
+   \caption{Demonstration of finding the darkest pixel at the surface with the TSDSF. (A) Hemispherical-directional surface reflectance scaled by $\smash{\pi}$ sr$^{-1}$, $\smash{\pi \, \rho_\text{s}(\hemidn \rightarrow \hat{\xi}_\text{D})}$; (B) Hemispherical-directional of the surface and at TOA along the main diagonal, scaled by $\smash{\pi}$ sr$^{-1}$; (C) Hemispherical-directional of the surface scaled by $\smash{\pi}$ sr$^{-1}$ and the ratio $\smash{\rho_\text{as}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \Lambda_w; \vec{x}) / \rho_\text{as}^\text{Hyp}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \Lambda_w; \vec{x})}$; (D) Hemispherical-directional of the surface scaled by $\smash{\pi}$ sr$^{-1}$ and the scaled ratio $\smash{\rho_\text{as}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \Lambda_w; \vec{x})^2 / \rho_\text{as}^\text{Hyp}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \Lambda_w; \vec{x})}$. All variables presented for the NIR waveband of OLI, centred at wavelength 865~nm.}
+   \label{fig:tsdsf_demo}
+\end{figure}
+
+Finally, the selection of the darkest pixel (lowest ratio) might lead to errors due to imagery artifacts (noise, detector malfunction, etc). As for standard DSF in ACOLITE, the ratio can be sorted and a given percentile value be chosen as reference value. The default in ACOLITE is the 1~\% darkest pixel.
+
+% Subsection -------------------------------------------------------------------
+\subsection{Estimation of aerosol properties}
+
+The darkest pixels at the surface can then be used to estimate $\smash{\tau_\text{aer}(550)}$. We first define the dark spectra at TOA and for the hypothetical quantity from the darkest pixels in each waveband and the appropriate spatial functions. To simplify the notation, we will use $\smash{\rho_\text{as}^\text{SDark}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \Lambda_w)}$ and $\smash{\rho_\text{as}^\text{Hyp SDark}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \Lambda_w)}$ to identify the dark spectra. That is:
+
+\begin{equation}
+\rho_\text{as}^\text{SDark}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \Lambda_w) = \rho_\text{as}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \Lambda_w; \vec{x}_{\text{a}_\text{SDark}}(\Lambda_w)),
+\end{equation}
+\begin{equation}
+\rho_\text{as}^\text{Hyp SDark}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \Lambda_w) = \rho_\text{as}^\text{Hyp}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \Lambda_w; \vec{x}_{\text{a}_\text{SDark}}(\Lambda_w)).
+\end{equation}
+
+By definition, the ratio of the path corrected $\smash{\rho_\text{as}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \Lambda_w; \vec{x})}$ to $\smash{\rho_\text{as}^\text{Hyp}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \Lambda_w; \vec{x})}$ for pixels with zero surface reflectance is equal to the relative upward diffuse transmittance. Therefore, by taking the dark spectra to represent the signal at TOA over pixels with 0 reflectance we have:
+
+\begin{equation}
+\frac{\rho_\text{pc}^\text{SDark}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \Lambda_w)}{\rho_\text{pc}^\text{Hyp SDark}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \Lambda_w)} = \frac{T_{\text{u}_\text{dif}}(\hemiup \rightarrow \hat{\xi}_\text{D}; \Lambda_w)}{T_{\text{u}_\text{tot}}(\hemiup \rightarrow \hat{\xi}_\text{D}; \Lambda_w)} + \varepsilon(\Lambda_w),
+\label{eq:ret_ratio}
+\end{equation}
+\begin{equation}
+\rho_\text{pc}^\text{SDark}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \Lambda_w) = \frac{\rho_\text{as}^\text{SDark}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \Lambda_w)}{T_\text{g}(\hat{\xi}_0; \hat{\xi}_\text{D}; \Lambda_w)} - \rho_\text{a}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \Lambda_w),
+\end{equation}
+\begin{equation}
+\rho_\text{pc}^\text{Hyp SDark}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \Lambda_w) = \frac{\rho_\text{as}^\text{Hyp SDark}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \Lambda_w)}{T_\text{g}(\hat{\xi}_0; \hat{\xi}_\text{D}; \Lambda_w)} - \rho_\text{a}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \Lambda_w),
+\end{equation}
+
+\noindent where $\smash{\varepsilon(\Lambda_w)}$ is an error term related to non-zero surface reflectance, as in Eq.~\ref{eq:ts_dsf_rhoa}. Since $\smash{T_\text{g}}$ can be calculated based on external information, and $\smash{T_{\text{u}_\text{dif}}}$, $\smash{T_{\text{u}_\text{tot}}}$, and $\smash{\rho_\text{a}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D})}$ are dependent on $\smash{\tau_\text{aer}(550)}$ for a given aerosol model, Eq.~\ref{eq:ret_ratio} can be solved with one unknown, $\smash{\tau_\text{aer}(550)}$. $\smash{\tau_\text{aer}(550)}$ is then estimated from Eq.~\ref{eq:ret_ratio} by optimisation, minimising the difference between the observed ratio and the predicted fractional diffuse transmittance for a given test value of $\smash{\rho_\text{a}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \Lambda_w)}$. The optimisation solution is constrained to $\smash{\tau_\text{aer}(550)}$ that would result at maximum in a $\smash{\rho_\text{a}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \Lambda_w)}$ equal to the darkest pixel at TOA corrected for gas transmittance, $\smash{\rho_\text{as}^{\text{TDark}}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \Lambda_w)/T_\text{g}(\hat{\xi}_0; \hat{\xi}_\text{D}; \Lambda_w)}$, preventing negative surface reflectances. The solution of Eq.~\ref{eq:ret_ratio} by optimisation requires no iteration of image processing. It operates only on the dark surface TOA spectrum and on LUT interpolation, resulting in considerable improvement on processing power over $\smash{\tau_\text{aer}(550)}$ estimations that require image processing iteration.
+
+The integro-normalised atmospheric diffuse point spread function, $\smash{\hat{\curlywedge}_\text{b}^*(\hemiup \rightarrow \hat{\xi}_\text{D}; \Lambda_w; \vec{x})}$, used in Eq.~\ref{eq:est_rho_e_toa} depends on the aerosol model and on the relative contributions of Rayleigh and aerosol to the upward diffuse transmittance. Since the aerosol models available in the LUT will not exactly match the aerosol properties in the observed scene and the diffuse transmittance component due to aerosols is not known ahead of time, the error term $\smash{\varepsilon(\Lambda_w)}$ also includes the effects of those differences, besides any direct upward transmittance from the darkest pixel at the surface having non-zero reflectance. 
+
+The effect of non-zero surface reflectances will produce a different estimation of $\smash{\tau_\text{aer}(550)}$ per waveband, and consequently of $\smash{\rho_\text{a}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \Lambda_w)}$. The spectra of the $\smash{\rho_\text{a}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \Lambda_w)}$ calculated from the $\smash{\tau_\text{aer}(550)}$ estimated at each waveband is the maximum path reflectance expected in each waveband for a given aerosol model, under the assumption that the surface reflectance is zero. We note, therefore, that this quantity is not equal to $\smash{\rho_\text{as}^{\text{TDark}}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \Lambda_w)/T_\text{g}(\hat{\xi}_0; \hat{\xi}_\text{D}; \Lambda_w)}$ as in the DSF approach (Eq.~\ref{eq:ts_dsf_rhoa}), and it will be represented hereafter by $\smash{\rho_\text{a}^\text{SDark}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \Lambda_w)}$.
+
+The solution of Eq.~\ref{eq:ret_ratio} will provide one estimate of $\smash{\tau_\text{aer}(550)}$ per waveband and per aerosol model. As in DSF, the lowest $\smash{\tau_\text{aer}(550)}$ estimate for each aerosol model is selected. This ensures no negative surface reflectance retrievals. The selection of the aerosol model is then performed with a similar approach to the one used in DSF, but substituting $\smash{\rho_\text{as}^\text{TDark}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \Lambda_w)}$ by $\smash{\rho_\text{a}^\text{SDark}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \Lambda_w)}$. That is, the aerosol model is selected based on the best lower bound fit between the estimated $\smash{\rho_\text{a}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \Lambda_w)}$ spectrum for the lowest $\smash{\tau_\text{aer}(550)}$ and $\smash{\rho_\text{a}^\text{SDark}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \Lambda_w)}$. We note that an implicit assumption of this method is that the atmosphere's composition can be considered constant in the scene (or tile), an assumption used in the development of the equations in Chapter~\ref{ch:theory}.
+
+We name this approach ``TOA and Surface Dark Spectra Fitting'' (TSDSF). Regardless of the option to process or not the ``edge area'' of the scene, the TSDSF uses only the ``centre area'' of the scene to estimate $\smash{\tau_\text{aer}(550)}$ and aerosol model (\textit{cf.} Chapter~\ref{ch:finite}). The pseudo-code of the TSDSF, including the compensation for the finite scene and kernels (\textit{cf.} Chapter~\ref{ch:finite}), is provided in the Appendix~\ref{ap:ts_dsf}.
+
+Further details are provided in Chapters~\ref{ch:sim01} and~\ref{ch:sim02}, but we summarise here that this approach results in accurate retrievals of aerosol properties up to moderate turbidities ($\tau_\text{aer}(550) < 0.4$), i.e., for the typical cases where $\smash{T_{\text{u}_\text{dif}}(\hemiup \rightarrow \hat{\xi}_\text{D}) < T_{\text{u}_\text{dir}}(\hemiup \rightarrow \hat{\xi}_\text{D})}$ (\textit{cf.} Fig.~\ref{fig:psf_diffrat_spectral}).
+
+\printendnotes[custom]
+

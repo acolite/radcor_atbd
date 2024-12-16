@@ -1,0 +1,20 @@
+\chapter{Pseudo-code: TSDSF} \label{ap:ts_dsf}
+
+The pseudo-code of the TSDSF method to estimate aerosol model and optical thickness from TOA imagery is provided below:
+
+\begin{enumerate}
+    \item Retrieve the atmospheric pressure at the surface and the optical thickness of absorbing gases per waveband.
+    \item Compensate $\smash{\rho_\text{as}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \Lambda_W; \vec{x})}$ for the transmittance of absorbing gases.
+    \item If the finite integro-normalised diffuse PSF $\smash{\bunderline[4]{\hat{\curlywedge}}_\text{b}^*(\hemiup \rightarrow \hat{\xi}_\text{D}; \Lambda_w; \vec{x})}$ will not be re-normalised to integrate to unity, calculate the neighbourhood average $\smash{\overbar{\rho}_{\text{as}_\text{nb}}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \Lambda_w; \vec{x})}$ or the scene average $\smash{\overbar{\rho}_\text{as}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \Lambda_w)}$ to account for the missing upward diffuse transmittance due to the finite PSF, $\smash{1 - f_{\curlywedge_\text{b}^*}(\Lambda_w)}$.
+    \item For each aerosol model:
+        \begin{enumerate}
+            \item Calculate $\smash{\bunderline[4]{\hat{\curlywedge}}_\text{b}^*(\hemiup \rightarrow \hat{\xi}_\text{D}; \Lambda_w; \vec{x})}$ for the preset value of $\smash{\tau_\text{aer}(550)} = 1$.
+            \item Estimate $\smash{\rho_\text{as}^\text{Hyp}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \Lambda_w; \vec{x})}$ as the convolution of $\smash{\rho_\text{as}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \Lambda_w; \vec{x})}$ and $\smash{\bunderline[4]{\hat{\curlywedge}}_\text{b}^*(\hemiup \rightarrow \hat{\xi}_\text{D}; \Lambda_w; \vec{x})}$, accounting for the missing fraction $\smash{1 - f_{\curlywedge_\text{b}^*}(\Lambda_w)}$ if $\smash{\bunderline[4]{\hat{\curlywedge}}_\text{b}^*(\hemiup \rightarrow \hat{\xi}_\text{D}; \Lambda_w; \vec{x})}$ was not re-normalised.
+            \item Identify the darkest pixels at the surface from pixels in the centre area of the scene with the lowest values of $\smash{\rho_\text{as}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \Lambda_w; \vec{x})^2}$ normalised by $\smash{\rho_\text{as}^\text{Hyp}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \Lambda_w; \vec{x})}$.
+            \item Using the darkest pixels at the surface in each band, define the $\smash{\rho_\text{as}^\text{SDark}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \Lambda_w)}$ and $\smash{\rho_\text{as}^\text{Hyp SDark}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \Lambda_w)}$ spectra.
+            \item Find the value of $\smash{\tau_\text{aer}(550)}$ that minimises the difference between the expected $\smash{T_{\text{u}_\text{dif}}(\hemiup \rightarrow \hat{\xi}_\text{D}; \Lambda_w)/T_{\text{u}_\text{tot}}(\hemiup \rightarrow \hat{\xi}_\text{D}; \Lambda_w)}$ and $\smash{\rho_\text{pc}^\text{SDark}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \Lambda_w)}$ normalised by $\smash{\rho_\text{pc}^\text{Hyp SDark}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \Lambda_w)}$. The path corrected values are calculated from the expected path reflectance $\smash{\rho_\text{a}^\text{SDark}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \Lambda_w)}$.
+            \item Select the lowest estimated $\smash{\tau_\text{aer}(550)}$.
+        \end{enumerate}
+    \item Select the aerosol model providing the lowest spectral coefficient of variation for the $\smash{\tau_\text{aer}(550)}$ estimation per waveband.
+\end{enumerate}
+

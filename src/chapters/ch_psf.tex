@@ -1,0 +1,55 @@
+\chapter{The atmospheric point spread function} \label{ch:psf}
+
+The upward hemispherical-directional transmittance of the atmosphere, $T_{\text{u}_\text{tot}}(\hemiup \rightarrow \hat{\xi})$, can be defined as the ratio of the exitant radiance at top of the atmosphere (TOA) in a given direction to the incident irradiance from a isotropic point source located at the bottom of the atmosphere (BOA). It was shown in Chapter~\ref{ch:theory} that this transmittance is the incident-average spatial integral of the bidirectional scattering-surface transmission distribution function (BSSTDF) of the atmosphere when illuminated by the surface, $\smash{\curlywedge_{\!\text{b}}(\hat{\xi}^\prime \rightarrow \hat{\xi}; \vec{x} - \vec{x}^{\, \prime})}$. The intermediate function, retaining the spatial distribution of the emergent radiance transmitted to the sensor, $\smash{\curlywedge_{\!\text{b}}(\hemiup \rightarrow \hat{\xi}; \vec{x} - \vec{x}^{\, \prime})}$, is known as the atmospheric point spread function (PSF). These concepts are illustrated in Fig.~\ref{fig:atm_psf_def}A for nadir observation.
+
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[trim=0 0 0 2cm, clip, width=0.45\linewidth]{psf_def}
+  \includegraphics[trim=0 0 0 2cm, clip, width=0.45\linewidth]{psf_kernel}
+  \caption{Illustration of the atmospheric point spread function (PSF). (A) The atmospheric PSF as the ratio of the radiance received at a given angle at the top of the atmosphere to the irradiance emitted by the point isotropic source. (B) The atmospheric PSF as the ratio of the radiance received at a given angle and position to the integral of the irradiance emitted by the an infinite number of isotropic point sources at the surface.}
+  \label{fig:atm_psf_def}
+\end{figure}
+
+As for the spatially-resolved spherical albedo discussed in Chapter~\ref{ch:sph_albd}, the component with a spatial dimension in the definition can be swapped between receiving surface and source, to provide an equivalent definition of the PSF, but from the perspective of radiance incident at a single position and direction. This is illustrated in Fig.~\ref{fig:atm_psf_def}B for nadir observation. This perspective more intuitively relates to the spatial kernel mapping the contribution of the each surface element to the transmitted radiance at TOA, received by a single detector element oriented in a given view direction. Once more, the use of isotropic point sources implies, for reflection, a Lambertian BRDF of the surface, which is in line with the system definitions in Chapter~\ref{ch:theory}.
+
+The atmospheric PSF includes the direct and diffuse transmission. The direct transmittance can be easily calculated from the attenuation law (Eq.~\ref{eq:theory_tdir}) for a given atmosphere composition and pathlength. It can be represented in the BSSTDF formalism by resorting to Dirac delta functions (Eq.~\ref{eq:theory_tudir_pulse_d}). The resulting pulse function transmits only the radiance at the origin, $\smash{\vec{x} - \vec{x}^{\, \prime} = \vec{0}}$. A schematic representation of the direct and diffuse kernels of the atmospheric PSF is presented in Fig.~\ref{fig:psf_scheme_components}.
+
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[width=0.6\linewidth]{psf_scheme_components.png}
+  \caption{Schematic representation of the atmospheric PSF kernel components, as given by Eq.~\ref{eq:theory_psf_tot}.}
+  \label{fig:psf_scheme_components}
+\end{figure}
+
+The diffuse component involves multiple scatter and requires the use of a radiative transfer code. The radiative transfer code written for RAdCor (\textit{cf.} Appendix~\ref{ap:apsfs}) was used to create a look-up-table of pre-calculated atmospheric diffuse PSFs for the scatter types included in ACOLITE. Figure~\ref{fig:psf_sim_res} shows properties of the diffuse PSF for those scatter types. Examples of the integro-normalised atmospheric diffuse PSF kernel are presented in Fig.~\ref{fig:psf_sim_kernel}. The magnitude and spectral dependency of diffuse fraction of the total upward diffuse transmission is presented in Fig.~\ref{fig:psf_diffrat_spectral}.
+
+Further information is provided in Appendix~\ref{ap:apsfs} on how the atmospheric diffuse point spread functions are calculated, fitted and reconstructed in RAdCor/ACOLITE for a specific combination of Rayleigh and aerosol contribution.
+
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[width=0.45\linewidth]{psf_sim_A}
+  \includegraphics[width=0.45\linewidth]{psf_sim_B}
+  \caption{Integro-normalised atmospheric diffuse point spread function (A) and its cumulative distribution function (B).}
+  \label{fig:psf_sim_res}
+\end{figure}
+
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[width=0.45\linewidth]{psf_oli_00_r}
+  \includegraphics[width=0.45\linewidth]{psf_oli_00_c}
+  \includegraphics[width=0.45\linewidth]{psf_oli_40_r}
+  \includegraphics[width=0.45\linewidth]{psf_oli_40_c}
+  \caption{Atmospheric diffuse PSF discrete kernels for the 3rd band of the Operational Land Imager on board Landsat~8. (A) Integro-normalised kernel for the Rayleigh scatter and nadir observation. (B) Integro-normalised kernel for a continental aerosol type and nadir observation. (C) and (D) the same as (A) and (B) but for a 40$^{\circ}$ view zenith angle (270$^{\circ}$ view azimuth angle).}
+  \label{fig:psf_sim_kernel}
+\end{figure}
+
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[trim=0.8cm 0.75cm 0.65cm 2.1cm, clip, width=0.45\linewidth]{ut_spectral_a}
+  \includegraphics[trim=0.8cm 0.75cm 0.65cm 2.1cm, clip, width=0.45\linewidth]{ut_spectral_b}
+  \includegraphics[trim=0.8cm 0.75cm 0.65cm 2.1cm, clip, width=0.45\linewidth]{ut_spectral_c}
+  \includegraphics[trim=0.8cm 0.75cm 0.65cm 2.1cm, clip, width=0.45\linewidth]{ut_spectral_d}
+  \caption{The fraction of $T_{\text{u}_\text{dif}}(\hemiup \rightarrow \hat{\xi})$ from $T_{\text{u}_\text{tot}}(\hemiup \rightarrow \hat{\xi})$ for the different scatter types included in ACOLITE. Continental (A), Maritime (B), and Urban (C) aerosols, as a function of the aerosol optical depth at 550 nm. (D) Rayleigh scatter, as a function of the atmospheric pressure at the surface.}
+  \label{fig:psf_diffrat_spectral}
+\end{figure}
+

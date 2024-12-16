@@ -1,0 +1,144 @@
+\chapter{Finite spatial extents} \label{ch:finite}
+
+The spatial scale of the $\smash{\curlyvee_\text{b}(\hemiup \rightarrow \hemidn; \vec{x})}$ and $\smash{\curlywedge_\text{b}^*(\hemiup \rightarrow \hat{\xi}_\text{D}; \vec{x})}$ kernels is on the order of several kilometres (\textit{cf.} Fig.~\ref{fig:sph_albd_sim_res} and Fig.~\ref{fig:psf_sim_res}). In the spectral range from the visible to the SWIR, a $\tau_\text{aer}(550)$ from 0 to 0.3~(unitless) requires a kernel radius from 10~km to 60~km radius to cover $\approx$ 100~\% of the area contributing to the signal over a pixel. Consequently, the extent of the kernels can be larger than the scene and is larger than the spatial scale in which spatial homogeneity of the atmosphere composition is a reasonable assumption ($\approx 3.5$~km radius). Therefore, to retrieve surface reflectance it is necessary to work with finite and truncated spatial kernels \citep{Reinersman1995}.
+
+The condition described above is presented schematically in Fig.~\ref{fig:finite_finite}, using the diffuse PSF as the example kernel. The finite scene and PSF extents will result in a ``centre area'' and in an ``edge area''. The centre area is defined by pixels more than half the PSF extent away from the scene border, while the edge area is the complement. The consequence of the finite extents are:
+
+\begin{enumerate}
+  \item The integro-normalised kernels no longer integrate to unity in their finite extents.
+  \item The edge area of the scene does not contain enough surrounding pixels to be processed even with the finite kernels.
+\end{enumerate}
+
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[width=0.5\linewidth]{finite}
+  \caption{Schematic representation of the scene. Traced line represent the borders of the finite truncated diffuse PSF and of the finite scene.}
+  \label{fig:finite_finite}
+\end{figure}
+
+In this chapter we will consider the approximations necessary to deal with these two consequences, expanding upon the suggestions of \cite{Reinersman1995}.
+
+% Section -------------------------------------------------------------------
+\section{Incomplete spatial kernels}
+
+We define $B_\text{in}$ as the surface area covered by the truncated kernels. We can then define the truncated kernels $\smash{\bunderline[4]{\curlyvee}_\text{b}(\hemiup \rightarrow \hemidn; \vec{x})}$ and $\smash{\bunderline[4]{\curlywedge}_\text{b}^*(\hemiup \rightarrow \hat{\xi}_\text{D}; \vec{x})}$ as:
+
+\begin{equation}
+\bunderline[4]{\curlyvee}_\text{b}(\hemiup \rightarrow \hemidn; \vec{x}) =
+\begin{cases}
+    \curlyvee_\text{b}(\hemiup \rightarrow \hemidn; \vec{x}),& \text{if } \vec{x} \in B_\text{in}\\
+    0,              & \text{otherwise}
+\end{cases},
+\end{equation}
+
+\begin{equation}
+\bunderline[4]{\curlywedge}_\text{b}^*(\hemiup \rightarrow \hat{\xi}_\text{D}; \vec{x}) =
+\begin{cases}
+    \curlywedge_\text{b}^*(\hemiup \rightarrow \hat{\xi}_\text{D}; \vec{x}),& \text{if } \vec{x} \in B_\text{in}\\
+    0,              & \text{otherwise}
+\end{cases}.
+\label{eq:finite_trunc_dif_psf}
+\end{equation}
+
+We note that while all the functions presented in this chapter vary with the sensor waveband $w$, the dependency of the relative spectral response function, $\Lambda_w$, is dropped to simplify the presentation. 
+
+Other useful quantities are the fractions of the spherical albedo $\smash{\rho_\text{b}(\hemiup \rightarrow \hemidn)}$ and hemispherical-directional upward transmittance $\smash{T_{\text{u}_\text{tot}}(\hemiup \rightarrow \hat{\xi}_\text{D})}$ that are covered in the finite extent of the kernels:
+
+\begin{equation}
+f_{\curlyvee_\text{b}} = \int\limits_{B} d\vec{x} \,\,\, \bunderline[4]{\hat{\curlyvee}}_\text{b}(\hemiup \rightarrow \hemidn; \vec{x}),
+\end{equation}
+
+\begin{equation}
+f_{\curlywedge_\text{b}^*} = \int\limits_{B} d\vec{x} \,\,\, \bunderline[4]{\hat{\curlywedge}}_\text{b}^*(\hemiup \rightarrow \hat{\xi}_\text{D}; \vec{x}).
+\end{equation} 
+
+The simplest approximation to account for the finite kernels is the re-normalisation given by:
+
+\begin{equation}
+\frac{\bunderline[4]{\hat{\curlyvee}}_\text{b}(\hemiup \rightarrow \hemidn; \vec{x})}{f_{\curlyvee_\text{b}}} \quad\quad\text{and}\quad\quad\frac{\bunderline[4]{\hat{\curlywedge}}_\text{b}^*(\hemiup \rightarrow \hat{\xi}_\text{D}; \vec{x})}{f_{\curlywedge_\text{b}^*}}.
+\end{equation}
+
+The re-normalisation approach, however, will overemphasise the contributions of pixels closer to the target pixel since the kernels are peaked in the center pixel. As a consequence, it will generally underestimate the adjacency effect, except in the immediacy of surface patch transitions.
+
+Alternatively, we can account for finite extent of the kernels by adding the missing fractions $\smash{1 - f_{\curlyvee_\text{b}}}$ and $\smash{1 - f_{\curlywedge_\text{b}^*}}$ as scaling factors of averaged spatial quantities. For example, the finite version of Eq.~\ref{eq:est_rho_e_toa} is:
+
+\begin{equation}
+\openup 2\jot
+\begin{split}
+&\frac{\rho_\text{as}^\text{Hyp}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \vec{x})}{T_\text{g}(\hat{\xi}_0; \hat{\xi}_\text{D})} \approx \\
+&\quad\quad\quad\left\{ \frac{\rho_\text{as}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \vec{x}^\prime)}{T_\text{g}(\hat{\xi}_0; \hat{\xi}_\text{D})} \circledast \bunderline[4]{\hat{\curlywedge}}_\text{b}^*(\hemiup \rightarrow \hat{\xi}_\text{D}; \vec{x}) \right\}(\vec{x}) \\
+&\quad\quad+\left\{ \frac{\rho_\text{as}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \vec{x}^\prime)}{T_\text{g}(\hat{\xi}_0; \hat{\xi}_\text{D})} \circledast \left[ \hat{\curlywedge}_\text{b}^*(\hemiup \rightarrow \hat{\xi}_\text{D}; \vec{x}^\prime) - \bunderline[4]{\hat{\curlywedge}}_\text{b}^*(\hemiup \rightarrow \hat{\xi}_\text{D}; \vec{x}) \right] \right\}(\vec{x}) \\
+& \\
+&\quad\quad\approx \left\{ \frac{\rho_\text{as}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \vec{x}^\prime)}{T_\text{g}(\hat{\xi}_0; \hat{\xi}_\text{D})} \circledast \bunderline[4]{\hat{\curlywedge}}_\text{b}^*(\hemiup \rightarrow \hat{\xi}_\text{D}; \vec{x}) \right\}(\vec{x}) \\
+&\quad\quad+\left\{ \frac{\rho_\text{as}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \vec{x}^\prime)}{T_\text{g}(\hat{\xi}_0; \hat{\xi}_\text{D})} \circledast \hat{U} \, \left[ 1 - f_{\curlywedge_\text{b}^*} \right] \right\}(\vec{x}),
+\end{split}
+\label{eq:finite_rho_e_toa}
+\end{equation}
+
+\noindent where $\smash{\hat{U}}$ is a integro-normalised uniform kernel of the same extent as $\smash{\bunderline[4]{\curlywedge}_\text{b}^*(\hemiup \rightarrow \hat{\xi}_\text{D}; \vec{x})}$. The convolution with the uniform kernel results in a ``local'' arithmetic average. Similarly, the finite version of Eq.~\ref{eq:radcor_rho_env_sph_toa} is:
+
+\begin{equation}
+\openup 2\jot
+\begin{split}
+\frac{\rho_{\text{as}_{\curlyvee_\text{b}}}(\hemidn \rightarrow \hemiup; \vec{x})}{T_\text{g}(\hat{\xi}_0; \hat{\xi}_\text{D})} &= \frac{\pi \, \rho_\text{as}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \vec{x})}{T_\text{g}(\hat{\xi}_0; \hat{\xi}_\text{D})} \circledast \bunderline[4]{\hat{\curlyvee}}_\text{b}(\hemiup \rightarrow \hemidn; \vec{x}) \\
+&+ \frac{\pi \, \rho_\text{as}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \vec{x})}{T_\text{g}(\hat{\xi}_0; \hat{\xi}_\text{D})} \circledast \left[\hat{\curlyvee}_\text{b}(\hemiup \rightarrow \hemidn; \vec{x}) - \bunderline[4]{\hat{\curlyvee}}_\text{b}(\hemiup \rightarrow \hemidn; \vec{x})\right] \\
+& \\
+&\approx \frac{\pi \, \rho_\text{as}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \vec{x})}{T_\text{g}(\hat{\xi}_0; \hat{\xi}_\text{D})} \circledast \bunderline[4]{\hat{\curlyvee}}_\text{b}(\hemiup \rightarrow \hemidn; \vec{x}) \\
+&+ \frac{\pi \, \rho_\text{as}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \vec{x})}{T_\text{g}(\hat{\xi}_0; \hat{\xi}_\text{D})} \circledast \hat{U} \, \left[1 - f_{\curlyvee_\text{b}}\right],
+\end{split}
+\label{eq:finite_rho_env_sph_toa}
+\end{equation}
+
+\noindent which allows for the estimation of $\smash{\rho_{\text{s}_{\curlyvee_\text{b}}}(\hemidn \rightarrow \hemiup; \vec{x}_\text{b})}$ with Eq.~\ref{eq:radcor_rho_env_sph} when considering finite images and truncated kernels.
+
+In RAdCor we term the approach using the uniform kernel the ``neighborhood'' (``local'' average) complete method. A similar approach is possible with the ``global'' scene average (covering the centre area of the scene), which we term the ``average'' complete method. Preliminary evaluation of the code with data over inland water systems in Belgium showed a better performance with the neighbourhood complete method.
+
+Finally, to retrieve the surface reflectances under finite scenes and truncated kernels, it is necessary to remove the missing fraction of the signal before the application of Eq.~\ref{eq:radcor_lambertian_scene_fourier}. We start by restating  Eq.~\ref{eq:theory_me_closed_form} in a more convenient format:
+
+\begin{equation}
+\openup 2\jot
+\begin{split}
+&\rho_\text{pc}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \vec{x}) = \\
+&\, T_{\text{d}_\text{tot}}(\hat{\xi}_0 \rightarrow \hemidn) \frac{\rho_\text{s}(\vec{x})}{1 -\rho_{\text{s}_{\curlyvee_\text{b}}}(\hemidn \rightarrow \hemiup; \vec{x}) \, \rho_\text{b}(\hemiup \rightarrow \hemidn)} \circledast \pi \, \bunderline[4]{\curlywedge}_\text{b}(\hemiup \rightarrow \hat{\xi}_\text{D}; \vec{x}) \\
+&\,+ T_{\text{d}_\text{tot}}(\hat{\xi}_0 \rightarrow \hemidn) \frac{\rho_\text{s}(\vec{x})}{1 -\rho_{\text{s}_{\curlyvee_\text{b}}}(\hemidn \rightarrow \hemiup; \vec{x}) \, \rho_\text{b}(\hemiup \rightarrow \hemidn)} \circledast \pi \left[ \curlywedge_\text{b}(\hemiup \rightarrow \hat{\xi}_\text{D};\vec{x}) - \bunderline[4]{\curlywedge}_\text{b}(\hemiup \rightarrow \hat{\xi}_\text{D}; \vec{x}) \right],
+\end{split}
+\label{eq:finite_me_closed_form}
+\end{equation} 
+
+\noindent where $\smash{\rho_\text{pc}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \vec{x})}$ is given by Eq.~\ref{eq:radcor_path_corrected}, and $\smash{\bunderline[4]{\curlywedge}_\text{b}(\hemiup \rightarrow \hat{\xi}_\text{D}; \vec{x})}$ is defined in a similar manner to Eq.~\ref{eq:finite_trunc_dif_psf}, but for the full PSF. We can then estimate the truncated path reflectance, $\smash{\bunderline[2]{\rho}_\text{pc}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \vec{x})}$, as:
+
+\begin{equation}
+\openup 2\jot
+\begin{split}
+&\bunderline[2]{\rho}_\text{pc}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \vec{x}) = \rho_\text{pc}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \vec{x}) \\
+&\,- T_{\text{d}_\text{tot}}(\hat{\xi}_0 \rightarrow \hemidn) \frac{\rho_\text{s}(\vec{x})}{1 -\rho_{\text{s}_{\curlyvee_\text{b}}}(\hemidn \rightarrow \hemiup; \vec{x}) \, \rho_\text{b}(\hemiup \rightarrow \hemidn)} \circledast \pi \left[ \curlywedge_\text{b}(\hemiup \rightarrow \hat{\xi}_\text{D};\vec{x}) - \bunderline[4]{\curlywedge}_\text{b}(\hemiup \rightarrow \hat{\xi}_\text{D}; \vec{x}) \right] \\
+& \\
+&\,\approx \rho_\text{pc}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \vec{x}) - \rho_\text{pc}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \vec{x}) \circledast \hat{U} \left[1 - f_{\curlywedge_\text{b}^*}\right] \, T_{\text{u}_\text{dif}}(\hemiup \rightarrow \hat{\xi}_\text{D}).
+\end{split}
+\label{eq:finite_path}
+\end{equation} 
+
+The retrieval of surface reflectance is then given by:
+
+\begin{equation}
+\openup 2\jot
+\rho_\text{s}(\vec{x}) = \frac{1 -\rho_{\text{s}_{\curlyvee_\text{b}}}(\hemidn \rightarrow \hemiup; \vec{x}) \, \rho_\text{b}(\hemiup \rightarrow \hemidn)}{T_{\text{d}_\text{tot}}(\hat{\xi}_0 \rightarrow \hemidn)} \, \mathcal{F}^{-1}\Biggr\{\frac{\mathcal{F}\Bigr\{\bunderline[2]{\rho}_\text{pc}(\hat{\xi}_0 \rightarrow \hat{\xi}_\text{D}; \vec{x}) \Bigr\}}{\mathcal{F}\Bigr\{\pi \, \bunderline[4]{\curlywedge}_\text{b}(\hemiup \rightarrow \hat{\xi}_\text{D}; \vec{x})\Bigr\}}\Biggr\}.
+\label{eq:radcor_lambertian_scene_fourier_finite}
+\end{equation} 
+
+The approximation proposed above by using the uniform kernel differs from the re-normalisation by not further emphasising the immediacy of the target pixel, despite both using the information over the same spatial extent. This is expected to be more representative since the missing fractions $\smash{1 - f_{\curlyvee_\text{b}}}$ and $\smash{1 - f_{\curlywedge_\text{b}^*}}$ are in the edges of the peaked kernels (that is, would result in averages over large spatial extents). We note that other averages could be used, as for example the constant scene average (``global'' average). However, though in theory it could provide a better representation for a average over a large spatial scale, it will introduce artefacts in the imagery (\textit{e.g.} in a coastal scene, where half the image is ocean and the other half is land, the scene average is representative of neither).
+
+% Section -------------------------------------------------------------------
+\section{Incomplete surrounding areas}
+
+The equations above only apply to the centre area of the scene, where the information necessary for the convolution with the finite spatial kernels is available. It is only possible to process the edge area if assumptions are made for the reflectance of the surfaces beyond the image extent, which is termed ``expansion area'' in Fig.~\ref{fig:finite_finite}, and defined by all pixels between the scene border and half the PSF extent beyond the scene border.
+
+When the surface elements are well distributed in the scene, the average TOA signal over the scene can be used as a constant extrapolation of the signal for the extension area. However, when the scene contains large surfaces concentrated near the borders (\textit{e.g.} a coastal scene), mirrored images of the scene can be used to expand the scene in each direction. Both those options are implemented in RAdCor, though the default recommendation is to keep only the centre area as it requires no further assumptions of the reflectance of surface areas beyond the scene extent. Processing the edge area also increases computational time, as the image is extended. Despite those shortcomings, processing the edge might be necessary for regions of interest consistently imaged near the edge of a swath for global observation missions (e.g., MSI/Sentinel-2), or in scenes from commercial very high spatial resolution sensors if the available sensor capability or budget does not allow to acquire imagery over an extended area that would allow to discard the edge.
+
+\section{Consequences of spatial finite kernels in EO}
+
+Due to the symmetrical nature if the Rayleigh scattering phase function with regards to the scattering angle, the higher the Rayleigh contribution to the upward diffuse transmittance relative to the contribution of aerosols, the larger the radius of the kernel. Therefore, the lower the $\tau_\text{aer}(550)$ and the lower the wavelength, the larger the radius of the kernels. This implies that in general, wavebands centred more towards the blue end of the spectrum will have a larger error in the estimation of the environmental functions. Nonetheless, the contrast between vegetation and water is lower in the visible than in the NIR and SWIR, hence uncertainties in the retrieved reflectance in the visible range are comparable or even lower than those in the NIR to SWIR range. It also should be noted that the lower the $\tau_\text{aer}(550)$, the lower the contribution of those environmental functions to the recorded signal, therefore higher uncertainties on the atmospheric functions do not fully propagate to the estimation of surface reflectance.
+
+
+
+

@@ -1,0 +1,37 @@
+\contentsline {chapter}{\numberline {1}Introduction}{7}{chapter.1}%
+\contentsline {chapter}{\numberline {2}Theoretical background}{9}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Atmospheric signal}{10}{section.2.1}%
+\contentsline {section}{\numberline {2.2}Target surface signal}{11}{section.2.2}%
+\contentsline {section}{\numberline {2.3}Environmental signal}{17}{section.2.3}%
+\contentsline {section}{\numberline {2.4}The ME over Lambertian surfaces}{20}{section.2.4}%
+\contentsline {section}{\numberline {2.5}The ME over homogeneous Lambertian surfaces}{21}{section.2.5}%
+\contentsline {section}{\numberline {2.6}Application of the MEs to remote observation data}{21}{section.2.6}%
+\contentsline {chapter}{\numberline {3}The spatially-resolved spherical albedo function}{25}{chapter.3}%
+\contentsline {chapter}{\numberline {4}The atmospheric point spread function}{29}{chapter.4}%
+\contentsline {chapter}{\numberline {5}Estimation of atmospheric optical properties}{33}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Aerosol estimation over homogeneous surfaces}{34}{section.5.1}%
+\contentsline {section}{\numberline {5.2}Aerosol estimation over heterogeneous surfaces}{35}{section.5.2}%
+\contentsline {subsection}{\numberline {5.2.1}Detection of darkest pixels at the surface}{37}{subsection.5.2.1}%
+\contentsline {subsection}{\numberline {5.2.2}Estimation of aerosol properties}{38}{subsection.5.2.2}%
+\contentsline {section}{Notes}{41}{section*.17}%
+\contentsline {chapter}{\numberline {6}Retrieval of surface reflectances}{43}{chapter.6}%
+\contentsline {section}{\numberline {6.1}Retrieval over Homogeneous Lambertian surfaces}{43}{section.6.1}%
+\contentsline {section}{\numberline {6.2}Retrieval over Heterogeneous Lambertian surfaces}{44}{section.6.2}%
+\contentsline {chapter}{\numberline {7}Finite spatial extents}{47}{chapter.7}%
+\contentsline {section}{\numberline {7.1}Incomplete spatial kernels}{47}{section.7.1}%
+\contentsline {section}{\numberline {7.2}Incomplete surrounding areas}{51}{section.7.2}%
+\contentsline {section}{\numberline {7.3}Consequences of spatial finite kernels in EO}{51}{section.7.3}%
+\contentsline {chapter}{\numberline {8}Evaluation: Simulated scene 1}{53}{chapter.8}%
+\contentsline {section}{\numberline {8.1}Evaluation of TSDSF}{54}{section.8.1}%
+\contentsline {section}{\numberline {8.2}Evaluation of RAdCor}{58}{section.8.2}%
+\contentsline {section}{\numberline {8.3}Combined evaluation of TSDSF and RAdCor}{59}{section.8.3}%
+\contentsline {chapter}{\numberline {9}Evaluation: Simulated scene 2}{63}{chapter.9}%
+\contentsline {section}{\numberline {9.1}Evaluation of TSDSF}{63}{section.9.1}%
+\contentsline {section}{\numberline {9.2}Evaluation of RAdCor}{64}{section.9.2}%
+\contentsline {section}{\numberline {9.3}Combined evaluation of TSDSF and RAdCor}{68}{section.9.3}%
+\contentsline {chapter}{Appendices}{71}{section*.37}%
+\contentsline {chapter}{\numberline {A}Pseudo-code: TSDSF}{73}{appendix.a.A}%
+\contentsline {chapter}{\numberline {B}Pseudo-code: RAdCor}{75}{appendix.a.B}%
+\contentsline {chapter}{\numberline {C}Radiative transfer simulations}{77}{appendix.a.C}%
+\contentsline {section}{\numberline {C.1}Transmittance and reflectance kernels in ACOLITE}{77}{section.a.C.1}%
+\contentsline {section}{\numberline {C.2}Radiative transfer simulations}{80}{section.a.C.2}%

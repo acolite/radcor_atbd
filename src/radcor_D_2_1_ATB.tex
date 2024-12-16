@@ -1,0 +1,188 @@
+% ------------------------------------------------------------------------------
+% RAdCor Deliverable 2.1
+% Algorithm Theoretical Basis Document
+%
+% Author: Alexandre Castagna (alexandre.castagna@eoplus.science)
+% Date: 2024/12/01
+% Version: 1
+% 
+%
+% Written for pdfTeX-1.40.24 (TeX Live 2022/Debian)
+%
+
+\documentclass[11pt,fleqn,twoside]{book}
+
+% -----------------------------------------------------------------------------
+% Packages
+%
+
+\usepackage[a4paper,width=150mm,top=25mm,bottom=25mm,bindingoffset=6mm]{geometry}
+\usepackage{mathtools}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage[round,semicolon,authoryear,sectionbib]{natbib}			% For citations and biliography
+\usepackage{lineno}
+\usepackage{authblk}
+\usepackage{siunitx}
+\usepackage{graphicx}								% For images
+  \graphicspath{ {images/} }							% Set default path for images
+\usepackage{trimclip}
+\usepackage[parfill]{parskip}
+\usepackage{setspace}								% For setting line spacing
+\usepackage{caption}								% To use subfigures
+\usepackage{subcaption}								% To use subfigures
+\usepackage[toc,page]{appendix}
+\usepackage[hidelinks]{hyperref}
+\hypersetup{
+  pdftitle = {RAdCor Algorithm Theoretical Basis},
+  pdfauthor = {Alexandre Castagna},
+  pdfsubject = {RAdCor Project Deliverable 2.1},
+  pdfkeywords = {adjacency, atmospheric blurring, adjacency correction, passive remote sensing}
+}
+\usepackage[usenames,dvipsnames]{xcolor}
+\usepackage{enotez}
+  \setenotez{mark-format = {\textbf}, backref = true, totoc=section, reset=true}
+  \DeclareInstance{enotez-list}{custom}{paragraph}{%
+    heading = \section*{#1}, 
+    notes-sep = \baselineskip, 
+    format = \normalfont, 
+    number = \textbf{\textsuperscript{#1}}
+  }
+
+% ------------------------------------------------------------------------------
+% Commands
+%
+
+\renewcommand\Affilfont{\itshape\small}
+
+\newcommand{\overbar}[1]{\mkern 1.5mu\overline{\mkern-1.5mu#1\mkern-1.5mu}\mkern 1.5mu}
+\newcommand{\bunderline}[2][4]{\underline{\mkern-#1mu #2\mkern-#1mu}\mkern #1mu}
+\newcommand{\argmin}{\mathop{\mathrm{argmin}}}
+\renewcommand{\thefootnote}{\textbf{\arabic{chapter}.\twodigits{\arabic{footnote}}}}
+
+\newcommand\twodigits[1]{%
+   \ifnum#1<10 0#1\else #1\fi
+}
+\renewcommand{\thefigure}{\arabic{chapter}.\twodigits{\arabic{figure}}}
+\renewcommand{\thetable}{\arabic{chapter}.\twodigits{\arabic{table}}}
+\renewcommand{\theequation}{\arabic{chapter}.\twodigits{\arabic{equation}}}
+
+\DeclareRobustCommand{\hemiup}{\raisebox{0.7\totalheight}{\text{\clipbox{0 {.4\totalheight} 0 0}{\ensuremath{\Xi}}}}}
+\DeclareRobustCommand{\hemidn}{\text{\clipbox{0 0 0 {.3\totalheight}}{\ensuremath{\Xi}}}}
+
+\onehalfspacing
+\emergencystretch 3em
+
+% ------------------------------------------------------------------------------
+% Cover and front matter
+%
+
+\begin{document}
+%\linenumbers
+
+\begin{titlepage}
+\begin{center}
+\vspace{5.0cm}
+\begin{figure}[t]
+\centering
+\includegraphics[trim=6cm 4cm 6cm 7cm, clip, width=\linewidth]{radcor_logo_color} 
+\end{figure}
+
+\vspace*{0.5cm}
+\huge
+\textbf{Algorithm Theoretical Basis}
+
+\Large
+\vspace{6.0cm}
+{\Large\scshape Deliverable 2.1}
+\end{center}            
+
+\vfill
+\large
+
+\begin{center}
+\large
+RAdCor Consortium \\
+Belgium \\
+December 2024
+\end{center}
+
+\end{titlepage}
+
+\chapter*{}
+{\large Remote Sensing Adjacency Correction - RAdCor Project}
+
+{\large Funded by BELSPO, STEREO IV Program, Grant SR/00/406.}
+
+\vspace{1.5cm}
+
+{\large Partners:}
+
+\vspace{0.5cm}
+
+{\large\scshape Alexandre Castagna} \\
+\noindent {\small alexandre.castagna@eoplus.science} \vspace*{0.2cm} \\
+{\large\scshape Koen Sabbe} \\
+\noindent {\small koen.sabbe@ugent.be} \vspace{0.2cm} \\
+\noindent \textit{Universiteit Gent} (UGent) \\
+\noindent \textit{Faculty of Sciences} \\
+\noindent \textit{281 Krijgslaan, Gent 9000, Belgium} \\
+
+{\large\scshape Quinten Vanhellemont} \\
+\noindent {\small qvanhellemont@naturalsciences.be} \vspace*{0.3cm} \\
+\noindent \textit{Koninklijk Belgisch Instituut voor Natuurwetenschappen} (KBIN) \\
+\noindent \textit{Operational Directorate Natural Environment} \\
+\noindent \textit{29 Vautierstraat, Brussels 1000, Belgium} \\
+
+\vspace{1.0cm}
+\noindent Suggested citation:\\
+\noindent Castagna, A.; Vanhellemont, Q.; Sabbe, K. 2024. RAdCor Algorithm Theoretical Basis Document. Version 12/2024. Available at: \url{https://github.com/acolite/radcor_atbd}.
+\vspace{1.0cm}
+
+\begin{center}
+\begin{tabular}{ m{2cm} m{10cm} }
+\includegraphics[width=2cm]{by-sa.png} & This report is licensed under the Creative Commons Attribution-ShareAlike 4.0 International license.
+\end{tabular}
+\end{center}
+
+\tableofcontents
+
+% ------------------------------------------------------------------------------
+% Chapters
+%
+
+\input{chapters/ch_intro}
+\input{chapters/ch_theory}
+\input{chapters/ch_sph_albd}
+\input{chapters/ch_psf}
+\input{chapters/ch_ts_dsf}
+\input{chapters/ch_radcor}
+\input{chapters/ch_finite}
+\input{chapters/ch_sim01}
+\input{chapters/ch_sim02}
+
+% ------------------------------------------------------------------------------
+% Appendices 
+% 
+
+\begin{appendices}
+
+\renewcommand{\thefigure}{\thechapter.\twodigits{\arabic{figure}}}
+\renewcommand{\thetable}{\thechapter.\twodigits{\arabic{table}}}
+\renewcommand{\theequation}{\thechapter.\twodigits{\arabic{equation}}}
+
+\input{chapters/ap_ts_dsf}
+\input{chapters/ap_radcor}
+\input{chapters/ap_apsfs}
+
+\end{appendices}
+
+% ------------------------------------------------------------------------------
+% Bibliography 
+% 
+
+\cleardoublepage
+\bibliographystyle{myplainnat}
+\bibliography{radcor_D_2_1_ATB}
+
+\end{document}
